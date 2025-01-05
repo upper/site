@@ -1,18 +1,19 @@
-- hosts: "{{ host }}"
+- hosts: "*"
 
   tasks:
 
     - name: pull image
       docker_image:
-        name: "upper/unsafebox:{{ image_tag }}"
+        name: "upper/unsafebox"
+        tag: "{{ docker_tag }}"
         source: pull
-        force_source: yes
+        force_source: true
         state: present
 
     - name: run unsafebox
       docker_container:
-        image: "upper/unsafebox:{{ image_tag }}"
-        name: upper-unsafebox
+        image: "upper/unsafebox:{{ docker_tag }}"
+        name: "{{ container_name }}"
         restart_policy: always
         recreate: yes
         memory: 512m
@@ -23,19 +24,19 @@
           - nproc:128
         privileged: yes
         ports:
-          - 127.0.0.1:8080:8080
+          - "{{ bind_addr }}:8080:8080"
 
     - name: add to docker network
       docker_network:
-        name: upper-network
+        name: "{{ network }}"
         state: present
         appends: yes
         connected:
-          - upper-unsafebox
+          - "{{ container_name }}"
 
     - name: test playground
       uri:
-        url: http://127.0.0.1:8080/compile
+        url: "http://{{ container_addr }}:8080/compile"
         method: POST
         body: 'version=2&body=package+main%0A%0Aimport+%22fmt%22%0A%0Afunc+main()+%7B%0A%09fmt.Println(%22Hello%2C+playground%22)%0A%7D%0A'
         status_code:
@@ -48,14 +49,15 @@
 
     - name: pull image
       docker_image:
-        name: "xiam/go-playground:{{ playground_image_tag }}"
+        name: "xiam/go-playground"
+        tag: "{{ playground_version }}"
         source: pull
-        force_source: yes
+        force_source: true
         state: present
 
     - name: run playground
       docker_container:
-        image: "xiam/go-playground:{{ playground_image_tag }}"
+        image: "xiam/go-playground:{{ playground_version }}"
         name: upper-playground-webapp
         restart_policy: always
         ports:
@@ -64,7 +66,7 @@
 
     - name: add to docker network
       docker_network:
-        name: upper-network
+        name: "{{ network }}"
         state: present
         appends: yes
         connected:

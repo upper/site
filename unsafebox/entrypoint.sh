@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 rm -rf $WORKDIR/c
 
 mkdir -p $WORKDIR/c/bin
@@ -27,6 +29,6 @@ mount -o ro,bind /etc/resolv.conf $WORKDIR/c/etc/resolv.conf
 chmod -R 755 $WORKDIR/c/go
 chmod -R 755 $WORKDIR/c/usr/local/go
 
-mount -t tmpfs -o size=800m tmpfs $WORKDIR/c/tmp
+mount -t tmpfs -o size=100m tmpfs $WORKDIR/c/tmp
 
 chroot --userspec unsafebox:unsafebox $WORKDIR/c /bin/playground

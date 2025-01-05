@@ -1,0 +1,15 @@
+ansible_user: "root"
+services_base_dir: "/var/data/services"
+
+container_bind_ip: "127.0.0.1"
+public_bind_ip: "0.0.0.0"
+
+network_name: "upper"
+
+healthcheck_retries: 20
+healthcheck_interval: 5
+
+docker_image_tag: "{{ lookup('env', 'DOCKER_IMAGE_TAG') | default('latest') }}"
+
+pgserver_demo_user: "demo"
+pgserver_demo_password: "b4dp4ss"

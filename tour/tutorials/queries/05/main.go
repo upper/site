@@ -19,16 +19,21 @@ var settings = cockroachdb.ConnectionURL{
 // primary key ("id"):
 //
 // booktown=> \d books
-//        Table "public.books"
-//    Column   |  Type   | Modifiers
+//
+//	    Table "public.books"
+//	Column   |  Type   | Modifiers
+//
 // ------------+---------+-----------
-//  id         | integer | not null
-//  title      | varchar | not null
-//  author_id  | integer |
-//  subject_id | integer |
+//
+//	id         | integer | not null
+//	title      | varchar | not null
+//	author_id  | integer |
+//	subject_id | integer |
+//
 // Indexes:
-//     "books_id_pkey" PRIMARY KEY, btree (id)
-//     "books_title_idx" btree (title)
+//
+//	"books_id_pkey" PRIMARY KEY, btree (id)
+//	"books_title_idx" btree (title)
 type Book struct {
 	ID        uint   `db:"id"`
 	Title     string `db:"title"`

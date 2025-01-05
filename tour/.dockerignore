@@ -1,6 +1,6 @@
 *
+!go.mod
+!go.sum
 !tutorials/*
 !static/*
-!vendor
 !cmd
-!certs

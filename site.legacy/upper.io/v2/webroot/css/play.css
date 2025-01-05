@@ -1,9 +1,0 @@
-.play a.run,
-.play a.run:active,
-.play a.run:link,
-.play a.run:visited {
-  color: #e74039;
-}
-main .CodeMirror {
-  height: 100%;
-}

@@ -33,13 +33,8 @@ docker-run: docker-build
 docker-push: docker-build
 	docker push $(IMAGE_NAME):$(IMAGE_TAG)
 
-deploy: docker-push
+deploy:
 	ansible-playbook \
 		-i ../conf/ansible.hosts \
-		-e host="$(DEPLOY_TARGET)" \
-		-e image_tag=$(IMAGE_TAG) \
-		-e playground_image_tag=$(PLAYGROUND_IMAGE_TAG) \
+		-e git_revision=$(IMAGE_TAG) \
 		playbook.yml
-
-deploy-prod:
-	DEPLOY_TARGET=unsafebox make deploy

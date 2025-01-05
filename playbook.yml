@@ -1,0 +1,12 @@
+---
+- name: "upper.io deployment playbook"
+  hosts: "{{ env }}"
+  tasks:
+    - name: "create shared network"
+      docker_network:
+        name: "{{ network_name }}"
+        state: "present"
+    - import_tasks: pgserver/tasks.yml
+    - import_tasks: site/tasks.yml
+    - import_tasks: vanity/tasks.yml
+    - import_tasks: nginx/tasks.yml
