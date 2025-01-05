@@ -7,8 +7,8 @@
         name: "{{ network_name }}"
         state: "present"
     - import_tasks: pgserver/tasks.yml
-    - import_tasks: playground/tasks.yml
-    - import_tasks: unsafebox/tasks.yml
+    - import_tasks: playground-executor/tasks.yml
+    - import_tasks: playground-webapp/tasks.yml
     - import_tasks: tour/tasks.yml
     - import_tasks: site/tasks.yml
     - import_tasks: vanity/tasks.yml

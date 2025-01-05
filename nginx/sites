@@ -2,8 +2,7 @@ server {
   server_name upper.io dev.upper.io;
   
   set $vanity http://upper-vanity:9001;
-  set $legacy_docs http://upper-legacy-docs:9000;
-  set $docs http://upper-docusaurus:80;
+  set $docs http://upper-site:80;
 
   resolver 127.0.0.11 valid=5s;
 
@@ -18,22 +17,6 @@ server {
   }
   
   location /img {
-    proxy_pass $docs;
-  }
-  
-  location = /blog/ {
-    proxy_set_header X-Real-IP  $remote_addr;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-    proxy_pass $docs/blog/;
-  }
-  
-  location /blog {
-    proxy_set_header X-Real-IP  $remote_addr;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
     proxy_pass $docs;
   }
   
@@ -101,14 +84,6 @@ server {
     error_page 404 = @fallback;
     log_not_found off;
   }
-
-  location @fallback {
-    proxy_set_header X-Real-IP  $remote_addr;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-    proxy_pass $legacy_docs;
-  }
 }
 
 server {
@@ -132,8 +107,8 @@ server {
 server {
   server_name demo.upper.io demo.dev.upper.io;
 
-  set $playground http://upper-playground-webapp:3000;
-  set $compiler   http://upper-unsafebox:8080;
+  set $webapp     http://upper-playground-webapp:3000;
+  set $executor   http://upper-playground-executor:3003;
 
   resolver 127.0.0.11 valid=5s;
 
@@ -160,7 +135,7 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-    proxy_pass $compiler;
+    proxy_pass $executor;
   }
 
   location / {
@@ -168,6 +143,6 @@ server {
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-    proxy_pass $playground;
+    proxy_pass $webapp;
   }
 }
