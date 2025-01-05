@@ -25,4 +25,4 @@ docker-push-%: docker-build-%
 	docker push upper/$*:${DOCKER_IMAGE_TAG} && \
 	docker push upper/$*:latest
 
-docker-build: docker-build-site docker-build-vanity
+docker-build: docker-build-site docker-build-vanity docker-build-unsafebox docker-build-tour

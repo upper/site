@@ -1,6 +1,7 @@
-FROM xiam/vanity:v0.3.0
+FROM xiam/vanity:latest
 
 EXPOSE 9001
+
 ENTRYPOINT [ \
   "/bin/vanity", \
   "-addr",        ":9001", \

@@ -1,34 +1,36 @@
-#!/bin/bash
+#!/bin/sh
 
 set -e
 
-rm -rf $WORKDIR/c
+export JAILDIR=$WORKDIR/jail
 
-mkdir -p $WORKDIR/c/bin
-mkdir -p $WORKDIR/c/usr/local/go
-mkdir -p $WORKDIR/c/go
-mkdir -p $WORKDIR/c/lib
-mkdir -p $WORKDIR/c/lib64
-mkdir -p $WORKDIR/c/tmp
-mkdir -p $WORKDIR/c/dev
-mkdir -p $WORKDIR/c/etc
+rm -rf $JAILDIR
 
-cp /app/playground $WORKDIR/c/bin
+mkdir -p $JAILDIR/usr/local/go
+mkdir -p $JAILDIR/dev
+mkdir -p $JAILDIR/lib
 
-echo "hosts: files dns" > $WORKDIR/c/etc/nsswitch.conf
+mkdir -p $JAILDIR/bin
+mkdir -p $JAILDIR/tmp
+mkdir -p $JAILDIR/etc
 
-mount -o ro,bind /usr/local/go $WORKDIR/c/usr/local/go
-mount -o ro,bind /go $WORKDIR/c/go
-mount -o ro,bind /dev $WORKDIR/c/dev
-mount -o ro,bind /lib $WORKDIR/c/lib
-mount -o ro,bind /lib64 $WORKDIR/c/lib64
+cp /app/bin/go-playground-executor $JAILDIR/bin
 
-touch $WORKDIR/c/etc/resolv.conf
-mount -o ro,bind /etc/resolv.conf $WORKDIR/c/etc/resolv.conf
+chown playground:playground $JAILDIR/bin/go-playground-executor
+chmod +x $JAILDIR/bin/go-playground-executor
 
-chmod -R 755 $WORKDIR/c/go
-chmod -R 755 $WORKDIR/c/usr/local/go
+echo "hosts: files dns" > $JAILDIR/etc/nsswitch.conf
 
-mount -t tmpfs -o size=100m tmpfs $WORKDIR/c/tmp
+mount -o ro,bind /usr/local/go $JAILDIR/usr/local/go
+mount -o ro,bind /dev $JAILDIR/dev
+mount -o ro,bind /lib $JAILDIR/lib
 
-chroot --userspec unsafebox:unsafebox $WORKDIR/c /bin/playground
+touch $JAILDIR/etc/resolv.conf
+
+mount -o ro,bind /etc/resolv.conf $JAILDIR/etc/resolv.conf
+
+chmod -R 755 $JAILDIR/usr/local/go
+
+mount -t tmpfs -o size=100m tmpfs $JAILDIR/tmp
+
+chroot $JAILDIR /bin/go-playground-executor

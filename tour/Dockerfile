@@ -8,6 +8,10 @@ RUN go install github.com/upper/site/tour/cmd/tour
 
 FROM alpine:3.20.3
 
+RUN apk update && \
+  apk add --no-cache \
+  libc6-compat
+
 WORKDIR /app
 
 RUN mkdir ./bin

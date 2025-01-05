@@ -4,3 +4,5 @@
 *.retry
 *.DS_Store
 node_modules/
+.venv
+bin/*
