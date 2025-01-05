@@ -1,6 +1,6 @@
 ---
 - name: "upper.io deployment playbook"
-  hosts: "{{ env }}"
+  hosts: "*"
   tasks:
     - name: "create shared network"
       docker_network:

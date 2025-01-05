@@ -19,7 +19,7 @@ docker-push-%: docker-build-%
 deploy-%:
 	ansible-playbook \
 		-i ./inventory \
-		-e "env=$*" \
+		-l "$*" \
 		-v playbook.yml
 
 docker-build: docker-build-site docker-build-vanity docker-build-playground-executor docker-build-tour

@@ -1,6 +1,6 @@
 - set_fact:
     image_name: "postgres"
-    image_tag: "14"
+    image_tag: "17"
     container_name: "postgres"
     container_base_dir: "{{ services_base_dir }}/postgres"
     postgres_user: "postgres"
@@ -53,8 +53,8 @@
     login_user: "{{ postgres_user }}"
   register: pgserver_ping
   until: pgserver_ping.is_available == true and pgserver_ping.failed == false
-  retries: 10
-  delay: 1
+  retries: "{{ healthcheck_retries }}"
+  delay: "{{ healthcheck_interval }}"
 - name: "remove demo database"
   postgresql_db:
     login_host: "{{ container_bind_ip }}"

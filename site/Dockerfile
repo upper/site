@@ -3,7 +3,8 @@ FROM node:current-alpine3.14 AS builder
 WORKDIR /app
 COPY . /app
 
-RUN yarn install && yarn build
+RUN yarn install && \
+	yarn build
 
 FROM nginx:alpine
 
