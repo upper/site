@@ -1,21 +1,12 @@
-GIT_SHORTHASH			  := $(shell git rev-parse --short HEAD)
+GIT_SHORTHASH       := $(shell git rev-parse --short HEAD)
+
 DOCKER_IMAGE_TAG    := $(GIT_SHORTHASH)
 
 PYTHON_BIN          ?= $(shell which python3)
 
 VIRTUAL_ENV         ?= ./.venv
 
-DEPLOY_ENV          ?= local
-
-export DEPLOY_ENV
-
 export DOCKER_IMAGE_TAG
-
-deploy:
-	ansible-playbook \
-		-i ./inventory \
-		-e "env=${DEPLOY_ENV}" \
-		-v playbook.yml
 
 docker-build-%:
 	docker build -t upper/$*:${DOCKER_IMAGE_TAG} -f $*/Dockerfile $*/
@@ -25,4 +16,14 @@ docker-push-%: docker-build-%
 	docker push upper/$*:${DOCKER_IMAGE_TAG} && \
 	docker push upper/$*:latest
 
+deploy-%:
+	ansible-playbook \
+		-i ./inventory \
+		-e "env=$*" \
+		-v playbook.yml
+
 docker-build: docker-build-site docker-build-vanity docker-build-playground-executor docker-build-tour
+
+docker-push: docker-push-site docker-push-vanity docker-push-playground-executor docker-push-tour
+
+deploy: deploy-local
