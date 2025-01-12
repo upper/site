@@ -34,3 +34,6 @@ deploy-%:
 
 deploy: \
 	deploy-local
+
+yamlfmt:
+	find . -name \*.yml | grep -v node_modules | xargs yamlfmt

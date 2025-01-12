@@ -10,4 +10,4 @@ dev:
     vanity:
     nginx:
       container_bind_ip: "10.0.28.80"
-      container_bind_port: "2645"
+      container_bind_port: "2880"

@@ -1,5 +1,8 @@
 server {
-  server_name upper.io www-dev.upper.io;
+  server_name 
+    upper.io 
+    site.upper.test.xiam.dev
+  ;
   
   set $site http://upper-site:80;
   set $vanity http://upper-vanity:9001;
@@ -28,7 +31,10 @@ server {
 }
 
 server {
-  server_name tour.upper.io tour-dev.upper.io;
+  server_name 
+    tour.upper.io 
+    tour.upper.test.xiam.dev
+  ;
   
   set $tour http://upper-tour:4000;
 
@@ -46,7 +52,10 @@ server {
 }
 
 server {
-  server_name demo.upper.io demo-dev.upper.io;
+  server_name 
+    demo.upper.io 
+    demo.upper.test.xiam.dev
+  ;
 
   set $webapp     http://upper-playground-webapp:3000;
   set $executor   http://upper-playground-executor:3003;
