@@ -1,15 +1,29 @@
 ---
-- name: "upper.io deployment playbook"
-  hosts: "*"
+- hosts: "all"
   tasks:
     - name: "create shared network"
       docker_network:
         name: "{{ network_name }}"
         state: "present"
+      ignore_errors: yes
+- hosts: "pgserver"
+  tasks:
     - import_tasks: pgserver/tasks.yml
+- hosts: "playground_executor"
+  tasks:
     - import_tasks: playground-executor/tasks.yml
+- hosts: "playground_webapp"
+  tasks:
     - import_tasks: playground-webapp/tasks.yml
+- hosts: "tour"
+  tasks:
     - import_tasks: tour/tasks.yml
+- hosts: "site"
+  tasks:
     - import_tasks: site/tasks.yml
+- hosts: "vanity"
+  tasks:
     - import_tasks: vanity/tasks.yml
+- hosts: "nginx"
+  tasks:
     - import_tasks: nginx/tasks.yml

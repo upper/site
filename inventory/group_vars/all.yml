@@ -2,7 +2,7 @@ ansible_user: "root"
 services_base_dir: "/var/data/services"
 
 container_bind_ip: "127.0.0.1"
-public_bind_ip: "0.0.0.0"
+# public_bind_ip: "0.0.0.0"
 
 network_name: "upper"
 

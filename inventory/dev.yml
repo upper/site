@@ -1,0 +1,6 @@
+dev:
+  hosts:
+    dev:
+      ansible_host: "dev.upper.hub"
+      container_bind_ip: "10.0.28.80"
+      env: "dev"
