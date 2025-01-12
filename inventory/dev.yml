@@ -1,6 +1,13 @@
 dev:
+  vars:
+    ansible_host: "dev.oslab.hub"
   hosts:
-    dev:
-      ansible_host: "dev.upper.hub"
+    pgserver:
+    playground_executor:
+    playground_webapp:
+    tour:
+    site:
+    vanity:
+    nginx:
       container_bind_ip: "10.0.28.80"
-      env: "dev"
+      container_bind_port: "2645"

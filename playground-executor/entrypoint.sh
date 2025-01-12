@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -xe
 
 export JAILDIR=$WORKDIR/jail
 
@@ -28,9 +28,6 @@ mount -o ro,bind /lib $JAILDIR/lib
 touch $JAILDIR/etc/resolv.conf
 
 mount -o ro,bind /etc/resolv.conf $JAILDIR/etc/resolv.conf
-
-chmod -R 755 $JAILDIR/usr/local/go
-
 mount -t tmpfs -o size=100m tmpfs $JAILDIR/tmp
 
 chroot $JAILDIR /bin/go-playground-executor

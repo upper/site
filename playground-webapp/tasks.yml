@@ -12,6 +12,7 @@
     name: "{{ image_full_name }}"
     source: "pull"
     state: "present"
+    force_source: "yes"
 - name: "stop container: {{ container_name }}"
   docker_container:
     name: "{{ container_name }}"

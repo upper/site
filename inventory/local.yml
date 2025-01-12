@@ -1,5 +1,13 @@
 local:
+  vars:
+    ansible_host: "127.0.0.1"
+    container_bind_ip: "{{ ansible_host }}"
   hosts:
-    localhost:
-      ansible_host: "127.0.0.1"
-      env: "local"
+    pgserver:
+    playground_executor:
+    playground_webapp:
+    tour:
+    site:
+    vanity:
+    nginx:
+      container_bind_ip: "0.0.0.0"
