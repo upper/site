@@ -62,9 +62,9 @@ server {
 
   resolver 127.0.0.11 valid=10s;
 
-  location = / {
-    return 302 https://tour.upper.io;
-  }
+  #location = / {
+  #  return 302 https://tour.upper.io;
+  #}
 
   location /compile {
     if ($request_method = 'OPTIONS') {
@@ -75,6 +75,7 @@ server {
       add_header 'Content-Length' 0;
       return 204;
     }
+
     if ($request_method = 'POST') {
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'POST, OPTIONS';

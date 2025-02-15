@@ -6,6 +6,7 @@ dev:
     playground_executor:
     playground_webapp:
     tour:
+      playground_url: "https://upper-playground-executor.wip.xiam.dev"
     site:
     vanity:
     nginx:

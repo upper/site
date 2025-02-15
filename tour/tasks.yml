@@ -29,6 +29,7 @@
       - "{{ container_bind_ip }}:{{ container_bind_port }}:{{ app_bind_port }}"
     env:
       ENV: "{{ env }}"
+      PLAY_URL: "{{ playground_url }}"
 - name: "health check"
   uri:
     url: "http://{{ container_bind_ip }}:{{ container_bind_port }}/"

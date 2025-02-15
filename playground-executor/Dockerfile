@@ -1,7 +1,9 @@
 FROM xiam/go-playground:latest
 
-RUN apk update && \
-  apk add \
+RUN apk update
+
+RUN apk add --no-cache \
+		bash \
     curl \
     gcc \
     git \
@@ -13,6 +15,7 @@ RUN apk update && \
     shadow
 
 ENV GOPATH=/go
+ENV GOROOT=/usr/local/go
 
 ENV SRCDIR=./src
 
@@ -26,7 +29,6 @@ RUN useradd -ms /bin/sh playground && \
   usermod -aG playground playground
 
 COPY entrypoint.sh /bin/entrypoint.sh
-
 RUN chmod +x /bin/entrypoint.sh
 
 RUN mkdir -p ${PKGDIR}
