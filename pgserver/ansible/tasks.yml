@@ -1,22 +1,23 @@
-- set_fact:
+- name: "set container facts"
+  set_fact:
     image_name: "postgres"
     image_tag: "17"
     container_name: "postgres"
     container_base_dir: "{{ services_base_dir }}/postgres"
     postgres_user: "postgres"
     postgres_password: "{{ lookup('password', '/dev/null length=20 chars=ascii_letters,digits') }}"
-- set_fact:
+- name: "set docker facts"
+  set_fact:
     image_full_name: "{{ image_name }}:{{ image_tag }}"
+    booktown_sql: "{{ container_base_dir }}/booktown.sql"
 - name: "create data directory"
   file:
     path: "{{ container_base_dir }}"
     state: "directory"
 - name: "upload booktown.sql"
   copy:
-    src: "./booktown.sql"
+    src: "../booktown.sql"
     dest: "{{ container_base_dir }}/booktown.sql"
-- set_fact:
-    booktown_sql: "{{ container_base_dir }}/booktown.sql"
 - name: "pull docker image: {{ image_full_name }}"
   docker_image:
     name: "{{ image_full_name }}"
@@ -25,8 +26,7 @@
 - name: "stop container: {{ container_name }}"
   docker_container:
     name: "{{ container_name }}"
-    state: "stopped"
-  ignore_errors: "yes"
+    state: "absent"
 - name: "(re)start container: {{ container_name }}"
   docker_container:
     name: "{{ container_name }}"

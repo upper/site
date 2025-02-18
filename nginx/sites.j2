@@ -1,7 +1,7 @@
 server {
   server_name 
     upper.io 
-    site.upper.test.xiam.dev
+    upper-site.wip.xiam.dev
   ;
   
   set $site http://upper-site:80;
@@ -11,15 +11,19 @@ server {
 
   root /var/www;
 
-	set $upstream $site;
+  set $upstream $site;
 
-	if ($arg_go-get = 1) {
-		set $upstream $vanity;
-	}
+  if ($arg_go-get = 1) {
+    set $upstream $vanity;
+  }
 
-	if ($request_uri ~ git-upload-pack) {
-		set $upstream $vanity;
-	}
+  if ($request_uri ~ git-upload-pack) {
+    set $upstream $vanity;
+  }
+  
+  location /tour {
+    return 301 {{ tour_url }};
+  }
 
   location / {
     proxy_set_header X-Real-IP  $remote_addr;
@@ -33,7 +37,7 @@ server {
 server {
   server_name 
     tour.upper.io 
-    tour.upper.test.xiam.dev
+    upper-tour.wip.xiam.dev
   ;
   
   set $tour http://upper-tour:4000;
@@ -54,7 +58,7 @@ server {
 server {
   server_name 
     demo.upper.io 
-    demo.upper.test.xiam.dev
+    upper-demo.wip.xiam.dev
   ;
 
   set $webapp     http://upper-playground-webapp:3000;
@@ -62,9 +66,9 @@ server {
 
   resolver 127.0.0.11 valid=10s;
 
-  #location = / {
-  #  return 302 https://tour.upper.io;
-  #}
+  location = / {
+    return 302 {{ tour_url }};
+  }
 
   location /compile {
     if ($request_method = 'OPTIONS') {

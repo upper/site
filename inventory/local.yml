@@ -10,4 +10,8 @@ local:
     site:
     vanity:
     nginx:
+      tour_url: "https://upper-tour.wip.xiam.dev"
+      playground_url: "https://upper-demo.wip.xiam.dev"
+      site_url: "https://upper-site.wip.xiam.dev"
       container_bind_ip: "0.0.0.0"
+      container_bind_port: "1754"

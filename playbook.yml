@@ -12,6 +12,7 @@
     - name: "set ansible_python_interpreter"
       set_fact:
         ansible_python_interpreter: "{{ virtualenv_dir }}/bin/python3"
+
 - hosts: "all"
   tasks:
     - name: "create shared network"
@@ -19,24 +20,32 @@
         name: "{{ network_name }}"
         driver: "bridge"
         state: "present"
+      run_once: true
+
 - hosts: "pgserver"
   tasks:
-    - import_tasks: pgserver/tasks.yml
+    - import_tasks: pgserver/ansible/tasks.yml
+
 - hosts: "playground_executor"
   tasks:
-    - import_tasks: playground-executor/tasks.yml
+    - import_tasks: playground-executor/ansible/tasks.yml
+
 - hosts: "playground_webapp"
   tasks:
-    - import_tasks: playground-webapp/tasks.yml
+    - import_tasks: playground-webapp/ansible/tasks.yml
+
 - hosts: "tour"
   tasks:
-    - import_tasks: tour/tasks.yml
+    - import_tasks: tour/ansible/tasks.yml
+
 - hosts: "site"
   tasks:
-    - import_tasks: site/tasks.yml
+    - import_tasks: site/ansible/tasks.yml
+
 - hosts: "vanity"
   tasks:
-    - import_tasks: vanity/tasks.yml
+    - import_tasks: vanity/ansible/tasks.yml
+
 - hosts: "nginx"
   tasks:
-    - import_tasks: nginx/tasks.yml
+    - import_tasks: nginx/ansible/tasks.yml
