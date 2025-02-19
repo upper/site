@@ -12,7 +12,7 @@ err := sess.Tx(func(tx db.Session) error {
 })
 ```
 
-The passed function defines what you want to do within the transaction, it
+The passed function defines what you want to do within the transaction; it
 receives a ready-to-be-used transactional session. This `tx` value can be used
 like a regular `db.Session`, except that any write operation that happens on it
 will be either fully committed or discarded (rolled back).

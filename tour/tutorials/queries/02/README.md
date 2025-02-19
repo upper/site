@@ -9,11 +9,11 @@ booksTable := sess.Collection("books")
 
 One of the methods defined by the `db.Collection` interface is `Find`.
 
-We'll use `Find` to search for specific records within the collection
-hierarchy. `Find` returns a [db.Result][2] object, which is delimited by the
-condition passed to `Find` and can contain zero, one, or many database records.
+Use `Find` to search for specific records within the collection hierarchy.
+`Find` returns a [db.Result][2] object, which is delimited by the condition
+passed to `Find` and can contain zero, one, or many database records.
 
-> The `db.Result` API works the same on all supported databases.
+The `db.Result` interface works the same on all supported databases.
 
 The following query fetches and maps all the records from the "books" table:
 
@@ -44,9 +44,8 @@ res := booksTable.Find(db.Cond{"id": 4})
 err := res.One(&book)
 ```
 
-You can also determine the total number of records in the result-set with
+You can also determine the total number of records in the result set with
 `Count`:
-
 
 ```go
 res := booksTable.Find()
@@ -55,9 +54,8 @@ total, err := res.Count()
 ...
 ```
 
-There are many options for you to define queries depending on your database
-type. Take a look
-[here](https://upper.io/v4/getting-started/agnostic-db-api/).
+Depending on your database type, you have many [options for defining
+queries][3].
 
 ## Query builder and raw SQL
 
@@ -78,8 +76,6 @@ rows, err := sess.SQL().Query("SELECT * FROM books")
 // rows is a regular *sql.Rows object.
 ```
 
-Given that the example in this tour is based on a SQL database, we'll elaborate
-hereunder on the use of both a) the SQL builder and b) raw SQL.
-
 [1]: https://pkg.go.dev/github.com/upper/db/v4#Collection
 [2]: https://pkg.go.dev/github.com/upper/db/v4#Result
+[3]: https://upper.io/v4/getting-started/agnostic-db-api

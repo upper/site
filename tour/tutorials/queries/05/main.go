@@ -5,12 +5,12 @@ import (
 	"log"
 
 	"github.com/upper/db/v4"
-	"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
-var settings = cockroachdb.ConnectionURL{
+var settings = postgresql.ConnectionURL{
 	Database: `booktown`,
-	Host:     `cockroachdb.demo.upper.io`,
+	Host:     `postgresql.demo.upper.io`,
 	User:     `demouser`,
 	Password: `demopass`,
 }
@@ -45,7 +45,7 @@ func main() {
 	// Set logging level to DEBUG
 	db.LC().SetLevel(db.LogLevelDebug)
 
-	sess, err := cockroachdb.Open(settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		fmt.Println("ERROR: Could not establish a connection with database: %v.", err)
 		log.Fatalf(`SUGGESTION: Set password to "demop4ss" and try again.`)

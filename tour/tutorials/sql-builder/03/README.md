@@ -1,7 +1,7 @@
 ## a) SQL Builder: Update, Insert and Delete
 
-The `Update` method creates and returns an [Updater][2] that can be used to
-build an UPDATE query:
+The `Update` method creates and returns an [Updater][1] that you can use to
+build an UPDATE statement:
 
 ```go
 q := sess.SQL().
@@ -12,8 +12,8 @@ q := sess.SQL().
 res, err := q.Exec()
 ```
 
-The `InsertInto` method creates and returns an [Inserter][3] that can be used
-to build an INSERT query:
+The `InsertInto` method creates and returns an [Inserter][2] that you can use
+to build an INSERT statement:
 
 ```go
 res, err = sess.SQL().
@@ -31,7 +31,7 @@ res, err = sess.SQL().
   Exec()
 ```
 
-In this case, using `Columns` is not mandatory. A struct can be passed to the
+In this case, using `Columns` is not mandatory. You can pass a struct to the
 `Values` method so it is mapped to columns and values, as shown below:
 
 ```go
@@ -46,7 +46,7 @@ res, err = sess.SQL().
   Exec()
 ```
 
-The `DeleteFrom` method creates and returns a [Deleter][4] that can be used to
+The `DeleteFrom` method creates and returns a [Deleter][3] that you can use to
 build a DELETE query:
 
 ```go
@@ -57,12 +57,11 @@ q := sess.SQL().
 res, err := q.Exec()
 ```
 
-Take a look at the
-[db.SQL](https://pkg.go.dev/github.com/upper/db/v4#SQL)
-interface to learn about all available methods for building and executing SQL
-statements.
-
 ## b) Raw SQL
+
+If none of the previous methods described are enough to express your query, you
+can use raw SQL. Look at the [db.SQL][4] interface to learn about all available
+methods for building and executing raw SQL statements.
 
 ```go
 res, err := sess.SQL().Exec(`UPDATE authors SET first_name = ? WHERE id = ?`, "Edgar
@@ -75,8 +74,7 @@ res, err := sess.SQL().Exec(`INSERT INTO authors VALUES`)
 res, err := sess.SQL().Exec(`DELETE authors WHERE id = ?`, "Edgar Allan", eaPoe.ID)
 ```
 
-[1]: https://pkg.go.dev/github.com/upper/db/v4#Selector
-[2]: https://pkg.go.dev/github.com/upper/db/v4#Updater
-[3]: https://pkg.go.dev/github.com/upper/db/v4#Inserter
-[4]: https://pkg.go.dev/github.com/upper/db/v4#Deleter
-
+[1]: https://pkg.go.dev/github.com/upper/db/v4#Updater
+[2]: https://pkg.go.dev/github.com/upper/db/v4#Inserter
+[3]: https://pkg.go.dev/github.com/upper/db/v4#Deleter
+[4]: https://pkg.go.dev/github.com/upper/db/v4#SQL

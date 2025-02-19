@@ -1,5 +1,5 @@
 ---
-title: CockroachDB adapter
+title: CockroachDB
 ---
 
 The `cockroachdb` adapter for [CockroachDB][2] wraps the `github.com/lib/pq`
@@ -286,7 +286,7 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 
 ## Take the tour
 
-Get the real `upper/db` experience, take the [tour](//tour.upper.io).
+Get the real `upper/db` experience, take the [tour](/tour).
 
 [1]: https://github.com/lib/pq
 [2]: https://www.cockroachlabs.com/

@@ -37,3 +37,11 @@ deploy: \
 
 yamlfmt:
 	find . -name \*.yml | grep -v node_modules | xargs yamlfmt
+
+run-site:
+	cd site && \
+	yarn start --host 0.0.0.0
+
+run-tour:
+	cd tour && \
+	go run cmd/tour/main.go

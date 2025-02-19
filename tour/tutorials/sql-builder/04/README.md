@@ -1,9 +1,7 @@
 ## b) Raw SQL
 
-If none of the previous methods described are enough to express your query, you
-can use Raw SQL - specifically `Query`, `QueryRow`, and `Exec`, which are
-provided by the [db.SQL][1] interface and mimic their counterparts in the
-`database/sql` API:
+The raw SQL API provides all the power you need for custom queries, along with
+object mapping, and other useful features of `upper/db`.
 
 ```go
 rows, err := sess.SQL().Query(`
@@ -15,8 +13,7 @@ row, err := sess.SQL().QueryRow(`SELECT * FROM authors WHERE id = ?`, 23)
 ...
 ```
 
-Using raw SQL does not mean you'll have to map Go fields manually. You can use
-the `NewIterator` method to make mapping easier:
+Use the `NewIterator` method to make mapping easier:
 
 ```go
 iter := sess.SQL().NewIterator(rows)

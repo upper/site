@@ -1,14 +1,25 @@
 - hosts: "all"
   tasks:
+    - name: "create services directory"
+      file:
+        path: "{{ services_base_dir }}"
+        state: "directory"
+        mode: "0755"
+      run_once: true
     - name: "push requirements"
       copy:
         src: "./requirements.txt"
         dest: "{{ services_base_dir }}/requirements.txt"
+      run_once: true
     - name: "install requirements and create virtualenv"
       pip:
         requirements: "{{ services_base_dir }}/requirements.txt"
         virtualenv: "{{ virtualenv_dir }}"
         virtualenv_command: "python3 -m venv"
+      run_once: true
+
+- hosts: "all"
+  tasks:
     - name: "set ansible_python_interpreter"
       set_fact:
         ansible_python_interpreter: "{{ virtualenv_dir }}/bin/python3"

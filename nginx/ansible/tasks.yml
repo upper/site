@@ -2,7 +2,7 @@
   set_fact:
     image_name: "nginx"
     image_tag: "alpine"
-    container_name: "nginx"
+    container_name: "{{ container_prefix}}nginx"
     container_base_dir: "{{ services_base_dir }}/nginx"
     app_bind_port: "80"
 - name: "set docker facts"

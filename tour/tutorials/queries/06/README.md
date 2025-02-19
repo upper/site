@@ -1,6 +1,6 @@
 # Update, insert, or delete records in a result set
 
-The records in result sets can not only be queried, but also modified and
+The records in result sets can not only be queried but also modified and
 removed.
 
 If you want to modify the properties of a whole result set, use `Update`:
@@ -24,7 +24,7 @@ result set consists of all the records in the collection:
 ```go
 res := booksCol.Find()
 
-// Updating all records in the result-set.
+// Updating all records in the result set.
 err := res.Update(map[string]int{
   "author_id": 23,
 })
@@ -39,8 +39,8 @@ err := res.Delete()
 // ...
 ```
 
-As with the `Update` examples, in the previous case only one record will be
-affected and in the following scenario all records will be deleted:
+As with the `Update` examples, in the previous case, only one record will be
+affected, and in the following scenario, all records will be deleted:
 
 ```go
 res := booksCol.Find()
@@ -50,8 +50,5 @@ err := res.Delete()
 ...
 ```
 
-In the particular case of SQL databases, you can also choose to use a builder
-or raw SQL query to execute update, insert, and delete operations.
-
-Given that the example in this tour is based on a SQL database, we'll elaborate
-hereunder on the use of both a) SQL builder methods and b) raw SQL statements.
+Given that the examples in this tour are based on an SQL database, we'll
+elaborate on the use of both a) SQL builder methods and b) raw SQL statements.

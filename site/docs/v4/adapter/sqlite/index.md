@@ -1,5 +1,5 @@
 ---
-title: SQLite adapter
+title: SQLite
 ---
 
 The `sqlite` adapter for [SQLite3][3] wraps the `github.com/mattn/go-sqlite3`
@@ -308,7 +308,7 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 
 ## Take the tour
 
-Get the real `upper/db` experience, take the [tour](//tour.upper.io).
+Get the real `upper/db` experience, take the [tour](/tour).
 
 [1]: https://github.com/mattn/go-sqlite3
 [2]: http://golang.org/doc/effective_go.html#blank

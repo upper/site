@@ -1,7 +1,11 @@
 local:
   vars:
+    env: "local"
     ansible_host: "127.0.0.1"
-    container_bind_ip: "{{ ansible_host }}"
+    container_bind_ip: "127.0.0.1"
+    tour_url: "https://upper-tour.wip.xiam.dev"
+    playground_url: "https://upper-demo.wip.xiam.dev"
+    site_url: "https://upper-site.wip.xiam.dev"
   hosts:
     pgserver:
     playground_executor:
@@ -10,8 +14,5 @@ local:
     site:
     vanity:
     nginx:
-      tour_url: "https://upper-tour.wip.xiam.dev"
-      playground_url: "https://upper-demo.wip.xiam.dev"
-      site_url: "https://upper-site.wip.xiam.dev"
       container_bind_ip: "0.0.0.0"
       container_bind_port: "1754"

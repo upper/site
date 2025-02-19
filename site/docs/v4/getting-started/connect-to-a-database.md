@@ -1,5 +1,5 @@
 ---
-title: Connect to a database
+title: Connecting to a database
 ---
 
 Use `go get` to import the database adapter:

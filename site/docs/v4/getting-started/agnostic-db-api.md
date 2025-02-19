@@ -764,4 +764,4 @@ iter.All(&accounts)
 
 To get the full picture on how to perform all CRUD tasks (starting right from
 the installation and setup steps), take the `upper/.db`
-[tour](https://tour.upper.io/welcome/01).
+[tour](/tour/welcome/01).

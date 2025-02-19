@@ -1,5 +1,5 @@
 ---
-title: QL adapter
+title: QL
 ---
 
 The `ql` adapter for [QL][1] wraps the `github.com/cznic/ql/ql` driver
@@ -229,7 +229,7 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 
 ## Take the tour
 
-Get the real `upper/db` experience, take the [tour](//tour.upper.io).
+Get the real `upper/db` experience, take the [tour](/tour).
 
 [1]: https://github.com/cznic/ql
 [2]: http://golang.org/doc/effective_go.html#blank

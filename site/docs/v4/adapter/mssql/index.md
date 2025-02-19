@@ -1,5 +1,5 @@
 ---
-title: Microsoft SQL server adapter
+title: Microsoft SQL Server
 ---
 
 The `mssql` adapter for [SQL Server][2] wraps the
@@ -287,7 +287,7 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 
 ## Take the tour
 
-Get the real `upper/db` experience, take the [tour](//tour.upper.io).
+Get the real `upper/db` experience, take the [tour](/tour).
 
 [1]: https://github.com/denisenkom
 [2]: https://www.microsoft.com/en-us/sql-server/sql-server-2016

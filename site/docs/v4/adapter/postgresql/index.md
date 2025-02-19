@@ -1,5 +1,5 @@
 ---
-title: PostgreSQL adapter
+title: PostgreSQL
 ---
 
 The `postgresql` adapter for PostgreSQL wraps the `github.com/lib/pq` driver
@@ -290,6 +290,6 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 
 ## Take the tour
 
-Get the real `upper/db` experience, take the [tour](//tour.upper.io).
+Get the real `upper/db` experience, take the [tour](/tour).
 
 [1]: https://github.com/lib/pq

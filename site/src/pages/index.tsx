@@ -20,7 +20,7 @@ function HomepageHeader() {
         <div className={styles.buttons}>
           <Link
             className={clsx('button button--outline button--primary button--lg', styles.getStarted)}
-            to="https://tour.upper.io">
+            to="/tour">
             Take the tour
           </Link>
         </div>

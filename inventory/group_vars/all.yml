@@ -1,13 +1,10 @@
 ansible_user: "root"
-container_bind_ip: "127.0.0.1"
 services_base_dir: "/var/data/services"
 virtualenv_dir: "{{ services_base_dir }}/venv"
 network_name: "upper"
+container_prefix: "upper-"
 healthcheck_retries: 5
 healthcheck_interval: 2
 docker_image_tag: "{{ lookup('env', 'DOCKER_IMAGE_TAG') | default('latest') }}"
 pgserver_demo_user: "demo"
 pgserver_demo_password: "b4dp4ss"
-env: "dev"
-playground_url: "https://demo.upper.io"
-tour_url: "https://tour.upper.io"

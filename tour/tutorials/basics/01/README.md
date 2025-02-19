@@ -1,35 +1,35 @@
-# Connect to a Database
+# Connect to a database
 
 ## 1. Get a Database Adapter
 
-To connect to a database you need an adapter. Use `go get` to get one, like
+To connect to a database, you need an adapter. Use `go get` to fetch it like
 this:
 
-```
-go get -u github.com/upper/db/v4/adapter/{$ADAPTER}
+```sh
+go get github.com/upper/db/v4/adapter/{$ADAPTER}
 ```
 
 Where `$ADAPTER` could be any of the following:
 
+* `postgresql`: for [PostgreSQL](https://www.postgresql.org/)
+* `mysql`: for [MySQL](https://www.mysql.com/)
+* `sqlite`: for [SQLite](https://www.sqlite.org/index.html)
 * `cockroachdb`: for [CockroachDB](https://www.cockroachlabs.com/product/)
 * `mongo`: for [MongoDB](https://www.mongodb.com/)
-* `mysql`: for [MySQL](https://www.mysql.com/)
-* `postgresql`: for [PostgreSQL](https://www.postgresql.org/)
 * `ql`: for [QL](https://pkg.go.dev/modernc.org/ql)
-* `sqlite`: for [SQLite](https://www.sqlite.org/index.html)
 
-For instace, if you'd like to use the `cockroachdb` adapter you'd first run:
+For instance, if you’d like to use the PostgreSQL adapter, you’d first run:
 
+```sh
+go get -u github.com/upper/db/v4/adapter/postgresql
 ```
-go get -u github.com/upper/db/v4/adapter/cockroachdb
-```
 
-to get the adapter, and then you can include it in the source code of your
+to get the adapter, and then you can import it into your
 project:
 
-```go
+```sh
 import (
-  "github.com/upper/db/v4/adapter/cockroachdb"
+  "github.com/upper/db/v4/adapter/postgresql"
 )
 ```
 
@@ -40,39 +40,38 @@ adapter:
 
 ```go
 import (
-  "github.com/upper/v4/adapter/cockroachdb"
+  "github.com/upper/v4/adapter/postgresql"
 )
 
-var settings = cockroachdb.ConnectionURL{
+var settings = postgresql.ConnectionURL{
   Database: `booktown`,
-  Host:     `cockroachdb.demo.upper.io`,
+  Host:     `postgresql.demo.upper.io`,
   User:     `demouser`,
   Password: `demop4ss`,
 }
 ```
 
 Note that the `ConnectionURL` (which satisfies the [db.ConnectionURL][1]
-interface) varies from one database engine to another. The connection
-properties required by each adapter are explained in detail
-[here](https://upper.io/docs/adapters).
+interface) varies from database engine to another. The connection properties
+required by each adapter are explained in detail [here][2].
 
-
-## 3. Attempt to Establish a Connection
+## 3. Establish a Connection
 
 Use the `Open` function to establish a connection with the database server:
 
 ```go
-sess, err := cockroachdb.Open(settings)
+sess, err := postgresql.Open(settings)
 ...
 ```
 
-## 4. Set the Connection to Close
+## 4. Close the Connection
 
 Set the database connection to close automatically after completing all tasks.
 Use `Close` and `defer`:
 
-```
+```go
 defer sess.Close()
 ```
 
 [1]: https://pkg.go.dev/github.com/upper/db/v4#ConnectionURL
+[2]: https://upper.io/v4/adapter/

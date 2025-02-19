@@ -2,7 +2,7 @@
   set_fact:
     image_name: "postgres"
     image_tag: "17"
-    container_name: "postgres"
+    container_name: "{{ container_prefix }}postgres"
     container_base_dir: "{{ services_base_dir }}/postgres"
     postgres_user: "postgres"
     postgres_password: "{{ lookup('password', '/dev/null length=20 chars=ascii_letters,digits') }}"
@@ -33,6 +33,7 @@
     image: "{{ image_full_name }}"
     state: "started"
     memory: 256m
+    hostname: "postgres"
     memory_swap: 0
     memory_swappiness: 0
     ulimits:

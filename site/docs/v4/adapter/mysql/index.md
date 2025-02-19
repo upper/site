@@ -1,5 +1,5 @@
 ---
-title: MySQL adapter
+title: MySQL
 ---
 
 The `mysql` adapter for [MySQL][2] wraps the `github.com/go-sql-driver/mysql`
@@ -290,7 +290,7 @@ res = sess.Find().Select(db.Raw("DISTINCT(name)"))
 
 ## Take the tour
 
-Get the real `upper/db` experience, take the [tour](//tour.upper.io).
+Get the real `upper/db` experience, take the [tour](/tour).
 
 [1]: https://github.com/go-sql-driver/mysql
 [2]: http://www.mysql.com

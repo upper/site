@@ -1,5 +1,5 @@
 ---
-title: MongoDB adapter
+title: MongoDB
 ---
 
 The `mongo` adapter for [MongoDB][3] wraps the `labix.org/v2/mgo` driver
@@ -188,7 +188,7 @@ Hironobu Sakaguchi was born in November 25, 1962.
 
 ## Take the tour
 
-Get the real `upper/db` experience, take the [tour](//tour.upper.io).
+Get the real `upper/db` experience, take the [tour](/tour).
 
 [1]: http://labix.org/v2/mgo
 [2]: http://bazaar.canonical.com/en/

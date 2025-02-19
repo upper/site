@@ -11,13 +11,13 @@ Number-based pagination splits the results into a fixed number of pages:
 // Create a result-set
 res = sess.Collection("posts").Find()
 
-// Set the amount of records by chunk
+// Set the number of records by chunk
 p := res.Paginate(20)
 
-// Get first chunk of results (page 1)
+// Get the first chunk of results (page 1)
 err = p.All(&posts)
 
-// Get second chunk of results (limit 20, offset 40)
+// Get the second chunk of results (limit 20, offset 40)
 err = p.Page(2).All(&posts)
 ```
 

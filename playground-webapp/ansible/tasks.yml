@@ -1,7 +1,7 @@
 - set_fact:
     image_name: "xiam/go-playground"
     image_tag: "latest"
-    container_name: "upper-playground-webapp"
+    container_name: "{{ container_prefix }}playground-webapp"
     app_bind_port: 3000
     container_bind_port: 3000
     data_dir: "{{ services_base_dir }}/playground"

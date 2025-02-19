@@ -9,15 +9,15 @@ You can access the SQL builder on SQL adapters using the `SQL()` method:
 builder := sess.SQL()
 ```
 
-There are different methods you can use to begin your query,
-for instance `SelectFrom`:
+There are different methods you can use to begin your query, for instance
+`SelectFrom`:
 
 ```go
 q := sess.SQL().
   SelectFrom("books")
 ```
 
-`SelectFrom` returns a [Selector][2] and some `Selector` methods return
+`SelectFrom` returns a [Selector][1] and some `Selector` methods return
 `Selector` too, so you can chain method calls like this:
 
 ```go
@@ -36,7 +36,7 @@ q = q.Where("title LIKE ?", "P%")
 ```
 
 Note that we're reassigning `q` in the last example. This is because queries
-are immutable and methods do not affect the caller, like in the next case
+are immutable, and methods do not affect the caller, like in the next case
 (where `q` is not affected by `Where`):
 
 ```go
@@ -61,7 +61,7 @@ err := q.One(&book)
 ```
 
 The `Selector` interface also features a special `Iterator` method to create an
-iterator and go through results one by one:
+iterator and go through the results one by one:
 
 ```go
 iter := q.Iterator()
@@ -75,3 +75,5 @@ if err := iter.Err(); err != nil {
   // ...
 }
 ```
+
+[1]: https://pkg.go.dev/github.com/upper/db/v4#Selector
