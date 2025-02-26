@@ -15,7 +15,7 @@
 - name: "stop container: {{ container_name }}"
   docker_container:
     name: "{{ container_name }}"
-    state: "stopped"
+    state: "absent"
   ignore_errors: "yes"
 - name: "(re)start container: {{ container_name }}"
   docker_container:
@@ -23,12 +23,12 @@
     image: "{{ image_full_name }}"
     state: "started"
     restart_policy: "always"
-    memory: 256m
+    memory: "2048M"
     memory_swap: "0"
     memory_swappiness: "0"
     privileged: "yes"
     ulimits:
-      - nofile:256:512
+      - nofile:512:1024
       - nproc:128
     networks:
       - name: "{{ network_name }}"

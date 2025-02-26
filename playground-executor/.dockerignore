@@ -1,4 +1,5 @@
 *
-!_tests
+!canary/go.sum
+!canary/go.mod
+!canary/main.go
 !entrypoint.sh
-!main.go

@@ -1,0 +1,14 @@
+.footer {
+  padding: 2rem 3rem;
+  color: #333;
+  text-align: center;
+}
+.footer .hearth {
+  color: #e74039;
+}
+.footer a {
+  text-decoration: underline;
+}
+main .CodeMirror {
+  height: 100%;
+}

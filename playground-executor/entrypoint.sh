@@ -2,35 +2,77 @@
 
 set -xe
 
-export JAILDIR=$WORKDIR/jail
-rm -rf $JAILDIR
+if [ -z "$WORKDIR" ]; then
+  echo "WORKDIR is not set"
+  exit 1
+fi
 
-mkdir -p $JAILDIR/{dev,lib,bin,etc,tmp,proc,sys,usr/local/go}
+export CHROOTDIR="$WORKDIR/chroot"
 
-cp /lib/ld-musl-x86_64.so.1 $JAILDIR/lib/
+rm -rf "$CHROOTDIR"
 
-echo "hosts: files dns" > $JAILDIR/etc/nsswitch.conf
+mkdir -p $CHROOTDIR/{dev,lib,bin,etc,tmp,proc,sys,go,ephemeral}
 
-mount -t tmpfs -o size=100m tmpfs $JAILDIR/tmp
+# /lib
+cp /lib/ld-musl-x86_64.so.1 $CHROOTDIR/lib/
 
-mount -o ro,bind /usr/local/go $JAILDIR/usr/local/go
+# /dev
+mkdir -p $CHROOTDIR/dev
+mknod -m 666 $CHROOTDIR/dev/null c 1 3
+mknod -m 666 $CHROOTDIR/dev/zero c 1 5
+mknod -m 666 $CHROOTDIR/dev/random c 1 8
+mknod -m 666 $CHROOTDIR/dev/urandom c 1 9
 
-mkdir -p $JAILDIR/dev
+# /proc
+mount -t proc proc $CHROOTDIR/proc
 
-mknod -m 666 $JAILDIR/dev/null c 1 3
-mknod -m 666 $JAILDIR/dev/zero c 1 5
-mknod -m 666 $JAILDIR/dev/random c 1 8
-mknod -m 666 $JAILDIR/dev/urandom c 1 9
+# /sys
+mount -t sysfs sysfs $CHROOTDIR/sys
 
-mount -t proc proc $JAILDIR/proc
-# mount -t sysfs sysfs $JAILDIR/sys
+# /go
+mount -o ro,bind /usr/local/go $CHROOTDIR/go
 
-touch $JAILDIR/etc/resolv.conf
-mount -o ro,bind /etc/resolv.conf $JAILDIR/etc/resolv.conf
+# create user entries
+echo "nobody:x:65534:65534:::" > $CHROOTDIR/etc/passwd
+echo "nobody:x:65534:" > $CHROOTDIR/etc/group
 
-cp /app/bin/go-playground-executor $JAILDIR/bin/
-chown playground:playground $JAILDIR/bin/go-playground-executor
-chmod +x $JAILDIR/bin/go-playground-executor
+# enable DNS resolution
+echo "hosts: files dns" > $CHROOTDIR/etc/nsswitch.conf
+cp /etc/resolv.conf $CHROOTDIR/etc/resolv.conf
 
-chroot $JAILDIR \
-	/bin/go-playground-executor
+# copy playground executor
+cp /app/bin/go-playground-executor $CHROOTDIR/bin/
+chown nobody:nobody $CHROOTDIR/bin/go-playground-executor
+chmod +x $CHROOTDIR/bin/go-playground-executor
+chmod u+s $CHROOTDIR/bin/go-playground-executor
+
+# prepare playground
+mount -t tmpfs -o defaults,size=256M,nosuid,noexec,nodev,mode=1755,uid=0,gid=0 tmpfs $CHROOTDIR/ephemeral
+
+cp -r $WORKDIR/playground $CHROOTDIR/ephemeral/playground
+
+chown -R root:root $CHROOTDIR/ephemeral
+chmod -R 755 $CHROOTDIR/ephemeral
+
+mkdir -p $CHROOTDIR/ephemeral/.gocache
+chown nobody:nobody $CHROOTDIR/ephemeral/.gocache
+
+mkdir -p $CHROOTDIR/ephemeral/playground/builds
+mount -t tmpfs -o defaults,size=512M,nosuid,nodev,mode=1777,uid=65534,gid=65534 tmpfs $CHROOTDIR/ephemeral/playground/builds
+
+export HOME=$WORKDIR
+export PATH=/bin:/go/bin
+export GOROOT=/go
+
+unset WORKDIR
+unset GOLANG_URL
+unset GOPATH
+unset HOME
+
+cd $CHROOTDIR
+unset CHROOTDIR
+
+export CGO_ENABLED=0
+export TMPDIR=/ephemeral/playground/builds
+
+/usr/sbin/chroot . /bin/go-playground-executor

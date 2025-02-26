@@ -1,9 +1,9 @@
-dev:
+sit:
   vars:
     env: "dev"
     ansible_host: "sit.oslab.internal"
-    tour_url: "https://upper-tour.sit.xiam.dev"
     container_bind_ip: "127.0.0.1"
+    tour_url: "https://upper-tour.sit.xiam.dev"
     playground_url: "https://upper-demo.sit.xiam.dev"
     site_url: "https://upper-site.sit.xiam.dev"
   hosts:
