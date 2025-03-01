@@ -23,7 +23,7 @@ server {
   }
   
   location /tour {
-    return 301 {{ tour_url }};
+    rewrite ^/tour(/.*)?$ {{ tour_url }}$1 permanent;
   }
 
   location / {

@@ -8,3 +8,4 @@ healthcheck_interval: 2
 docker_image_tag: "{{ lookup('env', 'DOCKER_IMAGE_TAG') | default('latest') }}"
 pgserver_demo_user: "demo"
 pgserver_demo_password: "b4dp4ss"
+public_docker_registry: "mirror.gcr.io"

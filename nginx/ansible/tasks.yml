@@ -7,7 +7,7 @@
     app_bind_port: "80"
 - name: "set docker facts"
   set_fact:
-    image_full_name: "{{ image_name }}:{{ image_tag }}"
+    image_full_name: "{{ public_docker_registry}}/{{ image_name }}:{{ image_tag }}"
     container_bind_port: "{{ container_bind_port | default(app_bind_port) }}"
 - name: "create config directory"
   file:
