@@ -9,10 +9,13 @@ import (
 )
 
 var settings = postgresql.ConnectionURL{
-	Database: `booktown`,
-	Host:     `postgresql.demo.upper.io`,
-	User:     `demouser`,
-	Password: `demopass`,
+	Database: "booktown",
+	Host:     "postgres",
+	User:     "demo",
+	Password: "demopass",
+	Options: map[string]string{
+		"sslmode": "disable", // Disable TLS
+	},
 }
 
 // Book represents a record from the "books" table. This table has an integer
@@ -48,7 +51,7 @@ func main() {
 	sess, err := postgresql.Open(settings)
 	if err != nil {
 		fmt.Println("ERROR: Could not establish a connection with database: %v.", err)
-		log.Fatalf(`SUGGESTION: Set password to "demop4ss" and try again.`)
+		log.Fatalf(`SUGGESTION: Set password to "b4dp4ss" and try again.`)
 	}
 	defer sess.Close()
 

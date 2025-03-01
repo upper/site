@@ -30,6 +30,8 @@ WORKDIR ${WORKDIR}
 COPY canary ./playground
 
 RUN cd ./playground && \
+  go get -u ./... && \
+  go mod tidy && \
   go mod vendor -o vendor && \
   go build -v -o /dev/null && \
   rm -f main.go

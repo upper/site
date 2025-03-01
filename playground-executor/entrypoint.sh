@@ -11,7 +11,7 @@ export CHROOTDIR="$WORKDIR/chroot"
 
 rm -rf "$CHROOTDIR"
 
-mkdir -p $CHROOTDIR/{dev,lib,bin,etc,tmp,proc,sys,go,ephemeral}
+mkdir -p $CHROOTDIR/{dev,lib,bin,etc,proc,sys,go,ephemeral}
 
 # /lib
 cp /lib/ld-musl-x86_64.so.1 $CHROOTDIR/lib/
@@ -42,23 +42,31 @@ cp /etc/resolv.conf $CHROOTDIR/etc/resolv.conf
 
 # copy playground executor
 cp /app/bin/go-playground-executor $CHROOTDIR/bin/
+
+# set permissions
 chown nobody:nobody $CHROOTDIR/bin/go-playground-executor
 chmod +x $CHROOTDIR/bin/go-playground-executor
 chmod u+s $CHROOTDIR/bin/go-playground-executor
 
 # prepare playground
-mount -t tmpfs -o defaults,size=256M,nosuid,noexec,nodev,mode=1755,uid=0,gid=0 tmpfs $CHROOTDIR/ephemeral
+mount -t tmpfs -o defaults,size=1024M,nosuid,noexec,nodev,mode=1755,uid=0,gid=0 tmpfs $CHROOTDIR/ephemeral
 
 cp -r $WORKDIR/playground $CHROOTDIR/ephemeral/playground
 
 chown -R root:root $CHROOTDIR/ephemeral
 chmod -R 755 $CHROOTDIR/ephemeral
 
+# prepare directory for builds
+mkdir -p $CHROOTDIR/ephemeral/playground/builds
+mount -t tmpfs -o defaults,size=512M,nosuid,nodev,mode=1755,uid=65534,gid=65534 tmpfs $CHROOTDIR/ephemeral/playground/builds
+
+# prepare GOCACHE
 mkdir -p $CHROOTDIR/ephemeral/.gocache
 chown nobody:nobody $CHROOTDIR/ephemeral/.gocache
 
-mkdir -p $CHROOTDIR/ephemeral/playground/builds
-mount -t tmpfs -o defaults,size=512M,nosuid,nodev,mode=1777,uid=65534,gid=65534 tmpfs $CHROOTDIR/ephemeral/playground/builds
+# prepare GOTMPDIR
+mkdir -p $CHROOTDIR/ephemeral/.gotmp
+chown nobody:nobody $CHROOTDIR/ephemeral/.gotmp
 
 export HOME=$WORKDIR
 export PATH=/bin:/go/bin
@@ -74,5 +82,24 @@ unset CHROOTDIR
 
 export CGO_ENABLED=0
 export TMPDIR=/ephemeral/playground/builds
+export GOTMPDIR=/ephemeral/.gotmp
+export GOCACHE=/ephemeral/.gocache
 
+if [ ! -z "$DEBUG" ]; then
+  cp /bin/sh $CHROOTDIR/bin/sh
+  cp /bin/ls $CHROOTDIR/bin/ls
+  cp /bin/touch $CHROOTDIR/bin/touch
+  cp /bin/cat $CHROOTDIR/bin/cat
+  cp /bin/rm $CHROOTDIR/bin/rm
+  cp /bin/mkdir $CHROOTDIR/bin/mkdir
+
+  chown nobody:nobody $CHROOTDIR/bin/sh
+  chmod +x $CHROOTDIR/bin/sh
+  chmod u+s $CHROOTDIR/bin/sh
+
+  echo "Entering debug mode"
+  /usr/sbin/chroot . /bin/sh
+fi
+
+echo "Starting go-playground-executor"
 /usr/sbin/chroot . /bin/go-playground-executor

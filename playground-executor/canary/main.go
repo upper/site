@@ -1,16 +1,21 @@
 package main
 
 import (
-	_ "github.com/upper/db/v4"
-	_ "github.com/upper/db/v4/adapter/cockroachdb"
-	_ "github.com/upper/db/v4/adapter/mongo"
-	_ "github.com/upper/db/v4/adapter/mssql"
-	_ "github.com/upper/db/v4/adapter/mysql"
-	_ "github.com/upper/db/v4/adapter/postgresql"
-	_ "github.com/upper/db/v4/adapter/ql"
-	_ "github.com/upper/db/v4/adapter/sqlite"
+	"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/mongo"
+	"github.com/upper/db/v4/adapter/mssql"
+	"github.com/upper/db/v4/adapter/mysql"
+	"github.com/upper/db/v4/adapter/postgresql"
+	"github.com/upper/db/v4/adapter/ql"
+	"github.com/upper/db/v4/adapter/sqlite"
 )
 
 func main() {
-
+	_ = cockroachdb.Adapter
+	_ = mongo.Adapter
+	_ = mssql.Adapter
+	_ = mysql.Adapter
+	_ = postgresql.Adapter
+	_ = sqlite.Adapter
+	_ = ql.Adapter
 }

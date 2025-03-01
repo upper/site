@@ -9,9 +9,9 @@ import (
 
 var settings = postgresql.ConnectionURL{
 	Database: `booktown`,
-	Host:     `postgresql.demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+	Host:     `postgres`,
+	User:     `demo`,
+	Password: `b4dp4ss`,
 }
 
 type Book struct {
