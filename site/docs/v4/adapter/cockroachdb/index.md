@@ -22,11 +22,10 @@ go get github.com/upper/db/v4/adapter/cockroachdb
 Import the `cockroachdb` package into your application:
 
 ```go
-// main.go
 package main
 
 import (
-  "github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/cockroachdb"
 )
 ```
 
@@ -99,88 +98,86 @@ The rows are inserted into the `birthday` table. The database is queried for
 the insertions and is set to print them to standard output.
 
 ```go
-// example.go
-
 package main
 
 import (
-  "fmt"
-  "log"
-  "time"
+	"fmt"
+	"log"
+	"time"
 
-  "github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/cockroachdb"
 )
 
 var settings = cockroachdb.ConnectionURL{
-  Database: `upperio_tests`,  // Database name
-  Host:     `localhost`,      // Server IP or name
-  User:     `upperio`,        // Username
-  Password: `upperio`,        // Password
+	Database: `upperio_tests`, // Database name
+	Host:     `localhost`,     // Server IP or name
+	User:     `upperio`,       // Username
+	Password: `upperio`,       // Password
 }
 
 type Birthday struct {
-  // The 'name' column of the 'birthday' table
-  // is mapped to the 'name' property.
-  Name string `db:"name"`
+	// The 'name' column of the 'birthday' table
+	// is mapped to the 'name' property.
+	Name string `db:"name"`
 
-  // The 'born' column of the 'birthday' table
-  // is mapped to the 'born' property.
-  Born time.Time `db:"born"`
+	// The 'born' column of the 'birthday' table
+	// is mapped to the 'born' property.
+	Born time.Time `db:"born"`
 }
 
 func main() {
 
-  // The database connection is attempted.
-  sess, err := cockroachdb.Open(settings)
-  if err != nil {
-    log.Fatalf("db.Open(): %q\n", err)
-  }
-  defer sess.Close() // Closing the session is a good practice.
+	// The database connection is attempted.
+	sess, err := cockroachdb.Open(settings)
+	if err != nil {
+		log.Fatalf("db.Open(): %q\n", err)
+	}
+	defer sess.Close() // Closing the session is a good practice.
 
-  // The 'birthday' table is referenced.
-  birthdayCollection := sess.Collection("birthday")
+	// The 'birthday' table is referenced.
+	birthdayCollection := sess.Collection("birthday")
 
-  // Any rows that might have been added between the creation of
-  // the table and the execution of this function are removed.
-  err = birthdayCollection.Truncate()
-  if err != nil {
-    log.Fatalf("Truncate(): %q\n", err)
-  }
+	// Any rows that might have been added between the creation of
+	// the table and the execution of this function are removed.
+	err = birthdayCollection.Truncate()
+	if err != nil {
+		log.Fatalf("Truncate(): %q\n", err)
+	}
 
-  // Three rows are inserted into the 'Birthday' table.
-  birthdayCollection.Insert(Birthday{
-    Name: "Hayao Miyazaki",
-    Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.Local),
-  })
+	// Three rows are inserted into the 'Birthday' table.
+	birthdayCollection.Insert(Birthday{
+		Name: "Hayao Miyazaki",
+		Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.Local),
+	})
 
-  birthdayCollection.Insert(Birthday{
-    Name: "Nobuo Uematsu",
-    Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.Local),
-  })
+	birthdayCollection.Insert(Birthday{
+		Name: "Nobuo Uematsu",
+		Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.Local),
+	})
 
-  birthdayCollection.Insert(Birthday{
-    Name: "Hironobu Sakaguchi",
-    Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.Local),
-  })
+	birthdayCollection.Insert(Birthday{
+		Name: "Hironobu Sakaguchi",
+		Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.Local),
+	})
 
-  // The database is queried for the rows inserted.
-  res := birthdayCollection.Find()
+	// The database is queried for the rows inserted.
+	res := birthdayCollection.Find()
 
-  // The 'birthdays' variable is filled with the results found.
-  var birthdays []Birthday
+	// The 'birthdays' variable is filled with the results found.
+	var birthdays []Birthday
 
-  err = res.All(&birthdays)
-  if err != nil {
-    log.Fatalf("res.All(): %q\n", err)
-  }
+	err = res.All(&birthdays)
+	if err != nil {
+		log.Fatalf("res.All(): %q\n", err)
+	}
 
-  // The 'birthdays' variable is printed to stdout.
-  for _, birthday := range birthdays {
-    fmt.Printf("%s was born in %s.\n",
-      birthday.Name,
-      birthday.Born.Format("January 2, 2006"),
-    )
-  }
+	// The 'birthdays' variable is printed to stdout.
+	for _, birthday := range birthdays {
+		fmt.Printf("%s was born in %s.\n",
+			birthday.Name,
+			birthday.Born.Format("January 2, 2006"),
+		)
+	}
 }
 ```
 

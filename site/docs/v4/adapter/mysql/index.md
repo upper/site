@@ -6,8 +6,8 @@ The `mysql` adapter for [MySQL][2] wraps the `github.com/go-sql-driver/mysql`
 driver written by [Julien Schmidt][1].
 
 > Before starting to read this detailed information, it is advisable that you
-> take a look at the [getting started](/v4/getting-started) page so you become
-> acquainted with the basics of `upper/db`, and you can grasp concepts better.
+> take a look at the [getting started](/v4/getting-started) page so you become
+> acquainted with the basics of `upper/db`, and you can grasp concepts better.
 
 ## Installation
 
@@ -99,88 +99,86 @@ The rows are inserted into the `birthday` table. The database is queried for
 the insertions and is set to print them to standard output.
 
 ```go
-// example.go
-
 package main
 
 import (
-  "fmt"
-  "log"
-  "time"
+	"fmt"
+	"log"
+	"time"
 
-  "github.com/upper/db/v4/adapter/mysql"   // Imports the mysql adapter.
+	"github.com/upper/db/v4/adapter/mysql" // Imports the mysql adapter.
 )
 
 var settings = mysql.ConnectionURL{
-  Database: `upperio_tests`,  // Database name
-  Host:     `localhost,`      // Server IP or name
-  User:     `upperio`,        // Username
-  Password: `upperio`,        // Password
+	Database: "upperio_tests", // Database name
+	Host:     "localhost",     // Server IP or name
+	User:     "upperio",       // Username
+	Password: "upperio",       // Password
 }
 
 type Birthday struct {
-  // The 'name' column of the 'birthday' table
-  // is mapped to the 'name' property.
-  Name string `db:"name"`
-  // The 'born' column of the 'birthday' table
-  // is mapped to the 'born' property.
-  Born time.Time `db:"born"`
+	// The 'name' column of the 'birthday' table
+	// is mapped to the 'name' property.
+	Name string `db:"name"`
+	// The 'born' column of the 'birthday' table
+	// is mapped to the 'born' property.
+	Born time.Time `db:"born"`
 }
 
 func main() {
 
-  // The database connection is attempted.
-  sess, err := mysql.Open(settings)
-  if err != nil {
-    log.Fatalf("db.Open(): %q\n", err)
-  }
-  defer sess.Close() // Closing the session is a good practice.
+	// The database connection is attempted.
+	sess, err := mysql.Open(settings)
+	if err != nil {
+		log.Fatalf("db.Open(): %q\n", err)
+	}
+	defer sess.Close() // Closing the session is a good practice.
 
-  // The 'birthday' table is referenced.
-  birthdayCollection := sess.Collection("birthday")
+	// The 'birthday' table is referenced.
+	birthdayCollection := sess.Collection("birthday")
 
-  // Any rows that might have been added between the creation of
-  // the table and the execution of this function are removed.
-  err = birthdayCollection.Truncate()
-  if err != nil {
-    log.Fatalf("Truncate(): %q\n", err)
-  }
+	// Any rows that might have been added between the creation of
+	// the table and the execution of this function are removed.
+	err = birthdayCollection.Truncate()
+	if err != nil {
+		log.Fatalf("Truncate(): %q\n", err)
+	}
 
-  // Three rows are inserted into the 'Birthday' table.
-  birthdayCollection.Insert(Birthday{
-    Name: "Hayao Miyazaki",
-    Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.Local),
-  })
+	// Three rows are inserted into the 'Birthday' table.
+	birthdayCollection.Insert(Birthday{
+		Name: "Hayao Miyazaki",
+		Born: time.Date(1941, time.January, 5, 0, 0, 0, 0, time.Local),
+	})
 
-  birthdayCollection.Insert(Birthday{
-    Name: "Nobuo Uematsu",
-    Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.Local),
-  })
+	birthdayCollection.Insert(Birthday{
+		Name: "Nobuo Uematsu",
+		Born: time.Date(1959, time.March, 21, 0, 0, 0, 0, time.Local),
+	})
 
-  birthdayCollection.Insert(Birthday{
-    Name: "Hironobu Sakaguchi",
-    Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.Local),
-  })
+	birthdayCollection.Insert(Birthday{
+		Name: "Hironobu Sakaguchi",
+		Born: time.Date(1962, time.November, 25, 0, 0, 0, 0, time.Local),
+	})
 
-  // The database is queried for the rows inserted.
-  var res db.Result
-  res = birthdayCollection.Find()
+	// The database is queried for the rows inserted.
+	var res db.Result
+	res = birthdayCollection.Find()
 
-  // The 'birthdays' variable is filled with the results found.
-  var birthdays []Birthday
+	// The 'birthdays' variable is filled with the results found.
+	var birthdays []Birthday
 
-  err = res.All(&birthdays)
-  if err != nil {
-    log.Fatalf("res.All(): %q\n", err)
-  }
+	err = res.All(&birthdays)
+	if err != nil {
+		log.Fatalf("res.All(): %q\n", err)
+	}
 
-  // The 'birthdays' variable is printed to stdout.
-  for _, birthday := range birthdays {
-    fmt.Printf("%s was born in %s.\n",
-      birthday.Name,
-      birthday.Born.Format("January 2, 2006"),
-    )
-  }
+	// The 'birthdays' variable is printed to stdout.
+	for _, birthday := range birthdays {
+		fmt.Printf("%s was born in %s.\n",
+			birthday.Name,
+			birthday.Born.Format("January 2, 2006"),
+		)
+	}
 }
 ```
 
@@ -273,14 +271,14 @@ Otherwise, an error will be returned.
 
 ### Helper functions
 
-Use `db.Func` to escape function names and arguments:
+Use `db.Func` to escape function names and arguments:
 
 
 ```go
 res = sess.Find().Select(db.Func("DISTINCT", "name"))
 ```
 
-Use the `db.Raw()` function for strings that have to be interpreted literally:
+Use the `db.Raw()` function for strings that have to be interpreted literally:
 
 ```go
 res = sess.Find().Select(db.Raw("DISTINCT(name)"))

@@ -29,11 +29,11 @@ log.Printf("The name of the collection is: %s", people.Name())
 The example below demonstrates how to explore all collections in the database
 and create collection references:
 
-$$
+```go
 package main
 
 import (
-  "fmt"
+	"fmt"
 	"log"
 
 	"github.com/upper/db/v4/adapter/postgresql"
@@ -65,7 +65,7 @@ func main() {
 		fmt.Printf("Collection: %q\n", collection.Name())
 	}
 }
-$$
+```
 
 ## Working with collections (CRUD)
 
@@ -153,11 +153,11 @@ If you're dealing with a relatively small number of items, you may want to dump
 them all at once, use the `All()` method on a result-set to do so, like in the
 following example:
 
-$$
+```go
 package main
 
 import (
-  "fmt"
+	"fmt"
 	"log"
 
 	"github.com/upper/db/v4/adapter/postgresql"
@@ -198,7 +198,7 @@ func main() {
 		fmt.Printf("book[%d]: %#v\n", i, books[i])
 	}
 }
-$$
+```
 
 #### Constraints on result-sets
 
@@ -425,11 +425,11 @@ defer res.Close()
 
 See the following example with `Find()` and `Next()`:
 
-$$
+```go
 package main
 
 import (
-  "fmt"
+	"fmt"
 	"log"
 
 	"github.com/upper/db/v4/adapter/postgresql"
@@ -466,7 +466,7 @@ func main() {
 		fmt.Printf("%d:\t%q, %q\n", customer.ID, customer.LastName, customer.FirstName)
 	}
 }
-$$
+```
 
 > There is no need to `Close()` the result set when using `All()` or `One` as
 > it's closed automatically.

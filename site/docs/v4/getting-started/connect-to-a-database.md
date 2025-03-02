@@ -97,13 +97,14 @@ err = sess.Close()
 The following example demonstrates how to connect, ping and disconnect from a
 PostgreSQL database.
 
-```go:embed
+```go
 package main
 
 import (
 	"fmt"
-	"github.com/upper/db/v4/adapter/postgresql"
 	"log"
+
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 var settings = postgresql.ConnectionURL{Database: "booktown", Host: "demo.upper.io", User: "demouser", Password: "demop4ss"}

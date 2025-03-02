@@ -11,7 +11,7 @@ type User struct {
 }
 ```
 
-add the `omitempty` option to struct fields that you don't want to send to the
+add the `omitempty` option to struct fields that you don't want to send to the
 database if they don't have a value, like IDs that are set to auto-increment
 (or auto-generate) themselves:
 
@@ -45,7 +45,7 @@ type Person struct {
 }
 ```
 
-Fields that don't have a db struct tag will be omitted from queries:
+Fields that don't have a db struct tag will be omitted from queries:
 
 ```go
 type Person struct {
@@ -56,8 +56,8 @@ type Person struct {
 
 ## Embedding structs​
 
-Using the `inline` option you can embed structs into other structs. See
-this struct, for instance:
+Using the `inline` option you can embed structs into other structs. See
+this struct, for instance:
 
 ```go
 type Person struct {
@@ -66,7 +66,7 @@ type Person struct {
 }
 ```
 
-This is a common struct that can be shared with other structs which also need `FirstName` and `LastName`:
+This is a common struct that can be shared with other structs which also need `FirstName` and `LastName`:
 
 ```go
 type Author struct {
@@ -82,93 +82,94 @@ type Employee struct {
 }
 ```
 
-See the following example: embedding the `Person` struct into `Author` and `Employee`
+See the following example: embedding the `Person` struct into `Author` and `Employee`
 
 ```go
 package main
-import
-(
-"fmt"
-"log"
-"github.com/upper/db/v4"
-"github.com/upper/db/v4/adapter/postgresql"
+
+import (
+	"fmt"
+	"log"
+
+	"github.com/upper/db/v4"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Person represents a person with a name.
 type Person struct {
-    FirstName string db:"first_name" 
-    LastName string db:"last_name"
-     }
+	FirstName string `db:first_name`
+	LastName  string `db:last_name`
+}
 
 // Author represents a person that is an author.
 type Author struct {
-ID int db:"id" 
-Person db:",inline" 
+	ID     int `db:"id"`
+	Person `db:",inline"`
 }
 
 // Employee represents a person that is an employee.
 type Employee struct {
-ID int db:"id" 
-Person db:",inline" 
+	ID     int `db:"id"`
+	Person `db:",inline"`
 }
 
 func Authors(sess db.Session) db.Collection {
-    return sess.Collection("authors")
+	return sess.Collection("authors")
 }
 
 func Employees(sess db.Session) db.Collection {
-    return sess.Collection("employees")
+	return sess.Collection("employees")
 }
 
 var settings = postgresql.ConnectionURL{
-    Database: booktown,
-    Host: demo.upper.io,
-    User: demouser,
-    Password: demop4ss,
+	Database: booktown,
+	Host:     demo.upper.io,
+	User:     demouser,
+	Password: demop4ss,
 }
 
 func main() {
-    sess, err := postgresql.Open(settings)
-    if err != nil {
-        log.Fatal("Open: ", err)
-    }
-    defer sess.Close()
+	sess, err := postgresql.Open(settings)
+	if err != nil {
+		log.Fatal("Open: ", err)
+	}
+	defer sess.Close()
 
-    // Get and print the first 5 authors ordered by last name
-    res := Authors(sess).Find(). OrderBy("last_name"). Limit(5)
+	// Get and print the first 5 authors ordered by last name
+	res := Authors(sess).Find().OrderBy("last_name").Limit(5)
 
-    var authors []Author
-    if err := res.All(&authors); err != nil {
-        log.Fatal("All: ", err)
-    }
+	var authors []Author
+	if err := res.All(&authors); err != nil {
+		log.Fatal("All: ", err)
+	}
 
-    fmt.Println("Authors (5):")
+	fmt.Println("Authors (5):")
 
-    for _, author := range authors {
-        fmt.Printf( "Last Name: %s\tID: %d\n", author.LastName, author.ID)
-    }
+	for _, author := range authors {
+		fmt.Printf("Last Name: %s\tID: %d\n", author.LastName, author.ID)
+	}
 
-    fmt.Println("")
+	fmt.Println("")
 
-    // Get and print the first 5 employees ordered by last name
-    res = Employees(sess).Find(). OrderBy("last_name"). Limit(5)
+	// Get and print the first 5 employees ordered by last name
+	res = Employees(sess).Find().OrderBy("last_name").Limit(5)
 
-    var employees []Author
-    if err := res.All(&employees); err != nil {
-        log.Fatal("All: ", err)
-    }
+	var employees []Author
+	if err := res.All(&employees); err != nil {
+		log.Fatal("All: ", err)
+	}
 
-    fmt.Println("Employees (5):")
+	fmt.Println("Employees (5):")
 
-    for _, employee := range employees {
-        fmt.Printf( "Last Name: %s\tID: %d\n", employee.LastName, employee.ID)
-    }
+	for _, employee := range employees {
+		fmt.Printf("Last Name: %s\tID: %d\n", employee.LastName, employee.ID)
+	}
 }
 ```
 
 ### Solving mapping ambiguities on JOINs​
 
-The previous example will work as long as you use the `db:",inline"` tag. You
+The previous example will work as long as you use the `db:",inline"` tag. You
 can even embed more than one struct into an other, but you should be careful
 with column ambiguities:
 
@@ -190,8 +191,8 @@ type Author struct {
 ```
 
 Embedding these two structs into a third one will cause a conflict of IDs, to
-solve this conflict you can add an extra `book_id` column mapping and use
-a `book_id` alias when querying for the book ID.
+solve this conflict you can add an extra `book_id` column mapping and use
+a `book_id` alias when querying for the book ID.
 
 ```
 // BookAuthor
@@ -207,66 +208,68 @@ type BookAuthor struct {
 
 ```go
 package main
+
 import (
-    "fmt"
-    "log"
-    "github.com/upper/db/v4"
-    "github.com/upper/db/v4/adapter/postgresql"
+	"fmt"
+	"log"
+
+	"github.com/upper/db/v4"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Book represents a book.
 type Book struct {
-    ID int db:"id" 
-    Title string db:"title" 
-    AuthorID int db:"author_id" 
-    SubjectID int db:"subject_id" 
+	ID        int    `db:"id"`
+	Title     string `db:"title"`
+	AuthorID  int    `db:"author_id"`
+	SubjectID int    `db:"subject_id"`
 }
 
 // Author represents the author of a book.
 type Author struct {
-    ID int db:"id" 
-    LastName string db:"last_name" 
-    FirstName string db:"first_name"
+	ID        int    `db:"id"`
+	LastName  string `db:"last_name"`
+	FirstName string `db:"first_name"`
 }
 
 // BookAuthor represents join data from books and authors.
 type BookAuthor struct {
-    // Both Author and Book have and ID column, we need this to tell the ID of
-    // the book from the ID of the author.
-    BookID int db:"book_id"
-    Author db:",inline" 
-    Book db:",inline"
+	// Both Author and Book have and ID column, we need this to tell the ID of
+	// the book from the ID of the author.
+	BookID int `db:"book_id"`
+	Author `db:",inline"`
+	Book   `db:",inline"`
 }
 
 var settings = postgresql.ConnectionURL{
-    Database: booktown,
-    Host: demo.upper.io,
-    User: demouser,
-    Password: demop4ss,
+	Database: booktown,
+	Host:     demo.upper.io,
+	User:     demouser,
+	Password: demop4ss,
 }
 
 func main() {
-    sess, err := postgresql.Open(settings)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer sess.Close()
+	sess, err := postgresql.Open(settings)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer sess.Close()
 
-    req := sess.SQL().
-        Select(
-            "b.id AS book_id",
-            db.Raw("b."),
-            db.Raw("a."),
-        ).From("books b").
-        Join("authors a").On("b.author_id = a.id"). OrderBy("b.title")
+	req := sess.SQL().
+		Select(
+			"b.id AS book_id",
+			db.Raw("b."),
+			db.Raw("a."),
+		).From("books b").
+		Join("authors a").On("b.author_id = a.id").OrderBy("b.title")
 
-    var books []BookAuthor
-    if err := req.All(&books); err != nil {
-        log.Fatal(err)
-    }
+	var books []BookAuthor
+	if err := req.All(&books); err != nil {
+		log.Fatal(err)
+	}
 
-    for _, book := range books {
-        fmt.Printf( "ID: %d\tAuthor: %s\t\tBook: %q\n", book.BookID, book.Author.LastName, book.Book.Title)
-    }
+	for _, book := range books {
+		fmt.Printf("ID: %d\tAuthor: %s\t\tBook: %q\n", book.BookID, book.Author.LastName, book.Book.Title)
+	}
 }
 ```

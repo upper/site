@@ -1,3 +1,7 @@
+---
+sidebar_position: 100
+---
+
 # Authors
 
 `upper/db` is a project by [José Nieto](https://xiam.dev) and
