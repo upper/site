@@ -4,9 +4,13 @@
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-    <link href="//fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
 
-    <link href="{{ .PlayURL }}/playground-full.css" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+
+    <link href="{{ .PlayURL }}/playground-full.css?{{ .InstanceID }}" rel="stylesheet" type="text/css" />
 
     <link href="/static/css/main.css" rel="stylesheet" />
     <link href="/static/css/style.css" rel="stylesheet" />
@@ -17,8 +21,8 @@
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 
-    <script src="{{ .PlayURL }}/playground-full.js"></script>
-    <script src="{{ .PlayURL }}/snippets.js"></script>
+    <script src="{{ .PlayURL }}/playground-full.js?{{ .InstanceID }}"></script>
+    <script src="{{ .PlayURL }}/snippets.js?{{ .InstanceID }}"></script>
 
     <link rel="icon" href="/favicon.svg" data-rh="true">
 
