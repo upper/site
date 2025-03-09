@@ -8,7 +8,7 @@ import codeBlock from './plugins/codeblock';
 const config: Config = {
   title: 'upper/db',
   tagline: 'A productive data access layer for Go',
-  favicon: 'img/gopher.svg',
+  favicon: 'img/favicon.svg',
 
   markdown: {
     format: 'md',
