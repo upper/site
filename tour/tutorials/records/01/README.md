@@ -45,8 +45,8 @@ func (book *Book) Store(sess db.Session) db.Store {
 var _ = db.Record(&Book{})
 ```
 
-You can use the `db.Record` interface with special `db.Session` methods suchs
-as `Get`, `Save` or `Delete`:
+You can use the `db.Record` interface with special `db.Session` methods such as
+`Get`, `Save` or `Delete`:
 
 ```go
 var book Book
@@ -70,9 +70,9 @@ err = sess.Delete(&book)
 ## Hooks
 
 `db.Record` objects can optionally satisfy hooks, which are special methods
-called before or after specific events. For instace, if we'd like the `Book`
-record to execute code right before inserting a new entry into the database
-we'd add a `BeforeCreate` hook, like this:
+called before or after specific events. For instance, if we'd like the `Book`
+record to execute code right before inserting a new entry into the database,
+we'd add a `BeforeCreate` hook like this:
 
 ```go
 func (book *Book) BeforeCreate(sess db.Session) error {
@@ -90,8 +90,8 @@ func (book *Book) BeforeCreate(sess db.Session) error {
 * `BeforeDelete(db.Session) error`
 * `AfterDelete(db.Session) error`
 
-Hooks in `upper/db` run within a database transaction, if any of the hooks
-return an error, the whole transactions is cancelled and rolled back.
+Hooks in `upper/db` run within a database transaction; if any of the hooks
+returns an error, the whole operation is canceled and rolled back.
 
 ## Validation
 
@@ -103,8 +103,5 @@ type Validator interface {
 }
 ```
 
-The `Validator` interface could be used to run validations against the record's
-own data.
-
-> The `db.Record` interface is only available for databases that support
-> transactions, such as CockroachDB, PostgreSQL, MySQL, MSSQL, SQLite and ql.
+You can use the `Validator` interface to run validations against the record's
+data.

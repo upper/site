@@ -1,2 +1,8 @@
 *
-!website/build
+!docs
+!plugins
+!package.json
+!src
+!static
+!yarn.lock
+!*.ts

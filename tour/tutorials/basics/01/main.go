@@ -5,21 +5,24 @@ import (
 	"log"
 
 	// Import an adapter
-	"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
 // Set the database credentials using the ConnectionURL type provided by the
 // adapter.
-var settings = cockroachdb.ConnectionURL{
-	Database: `booktown`,
-	Host:     `cockroachdb.demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+var settings = postgresql.ConnectionURL{
+	Database: "booktown",
+	Host:     "postgres",
+	User:     "demo",
+	Password: "b4dp4ss",
+	Options: map[string]string{
+		"sslmode": "disable", // Disable TLS
+	},
 }
 
 func main() {
 	// Use Open to access the database.
-	sess, err := cockroachdb.Open(settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal("Open: ", err)
 	}

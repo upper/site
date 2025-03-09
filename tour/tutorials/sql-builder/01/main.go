@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
-var settings = cockroachdb.ConnectionURL{
+var settings = postgresql.ConnectionURL{
 	Database: `booktown`,
-	Host:     `cockroachdb.demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+	Host:     `postgres`,
+	User:     `demo`,
+	Password: `b4dp4ss`,
 }
 
 type Book struct {
@@ -22,7 +22,7 @@ type Book struct {
 }
 
 func main() {
-	sess, err := cockroachdb.Open(settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal("Open: ", err)
 	}

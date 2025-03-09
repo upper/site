@@ -1,6 +1,6 @@
 ## a) SQL Builder: JOIN Queries and Struct Composition
 
-Now let's suppose you have independent Go structs (each one mapped to a
+Now, let's suppose you have independent Go structs (each one mapped to a
 different table) and a JOIN query that returns a result combining columns from
 all the mapped tables.
 

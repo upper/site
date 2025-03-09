@@ -1,0 +1,46 @@
+- set_fact:
+    image_name: "xiam/go-playground"
+    image_tag: "latest"
+    container_name: "{{ container_prefix }}playground-webapp"
+    app_bind_port: 3000
+    container_bind_port: 3000
+    data_dir: "{{ services_base_dir }}/playground"
+- set_fact:
+    image_full_name: "{{ public_docker_registry }}/{{ image_name }}:{{ image_tag }}"
+- name: "pull docker image: {{ image_full_name }}"
+  docker_image:
+    name: "{{ image_full_name }}"
+    source: "pull"
+    state: "present"
+    force_source: "yes"
+- name: "stop container: {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    state: "stopped"
+  ignore_errors: "yes"
+- name: "(re)start container: {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_full_name }}"
+    state: "started"
+    restart_policy: "always"
+    volumes:
+      - "{{ data_dir }}:/data"
+    networks:
+      - name: "{{ network_name }}"
+    ports:
+      - "{{ container_bind_ip }}:{{ container_bind_port }}:{{ app_bind_port }}"
+    env:
+      ENV: "{{ env }}"
+    command: ["go-playground-webapp", "-allow-share", "-db", "/data/playground.db", "-c", "http://upper-unsafebox:3003/compile?output=json"]
+- name: "health check"
+  uri:
+    url: "http://{{ container_bind_ip }}:{{ container_bind_port }}/"
+    method: GET
+    status_code:
+      - 200
+    return_content: yes
+  register: response
+  until: response.status == 200
+  retries: "{{ healthcheck_retries }}"
+  delay: "{{ healthcheck_interval }}"

@@ -5,14 +5,17 @@ import (
 	"log"
 
 	"github.com/upper/db/v4"
-	"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
-var settings = cockroachdb.ConnectionURL{
-	Database: `booktown`,
-	Host:     `cockroachdb.demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+var settings = postgresql.ConnectionURL{
+	Database: "booktown",
+	Host:     "postgres",
+	User:     "demo",
+	Password: "b4dp4ss",
+	Options: map[string]string{
+		"sslmode": "disable", // Disable TLS
+	},
 }
 
 // Book represents a record from the "books" table.
@@ -45,7 +48,7 @@ var _ = interface {
 }(&Book{})
 
 func main() {
-	sess, err := cockroachdb.Open(settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal("Open: ", err)
 	}

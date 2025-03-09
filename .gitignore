@@ -1,5 +1,9 @@
 *.sw?
+*.txt
+*.log
 *.retry
 *.DS_Store
-private/
-conf/ansible.hosts
+node_modules/
+vendor
+.venv
+bin/*

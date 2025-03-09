@@ -3,25 +3,28 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <link href="//fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
 
-    <link type="text/css" rel="stylesheet" href="/static/css/main.css">
+    <link rel="preconnect" href="//fonts.googleapis.com">
+    <link rel="preconnect" href="//fonts.gstatic.com" crossorigin>
+
+    <link href="//fonts.googleapis.com/css?family=Raleway:500,700|Source+Serif+Pro:400,700|Source+Code+Pro:400,600" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap" rel="stylesheet">
+
+    <link href="{{ .PlayURL }}/playground-full.css?{{ .InstanceID }}" rel="stylesheet" type="text/css" />
+
+    <link href="/static/css/main.css" rel="stylesheet" />
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <link href="/static/css/syntax.css" rel="stylesheet" />
+    <link href="/static/css/upper.css" rel="stylesheet" />
+
+    <link href="/static/css/codemirror-material.css" rel="stylesheet" type="text/css" />
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 
-    <link href="{{ .PlayURL }}/static/example.css" rel="stylesheet" type="text/css" />
-    <link href="{{ .PlayURL }}/static/codemirror.css" rel="stylesheet" type="text/css" />
-    <link href="//codemirror.net/theme/material.css" rel="stylesheet" type="text/css" />
+    <script src="{{ .PlayURL }}/playground-full.js?{{ .InstanceID }}"></script>
+    <script src="{{ .PlayURL }}/snippets.js?{{ .InstanceID }}"></script>
 
-    <link href="//upper.io/db.v3/css/style.css" rel="stylesheet">
-    <link href="//upper.io/db.v3/css/syntax.css" rel="stylesheet">
-    <link href="//upper.io/db.v3/css/upper.css" rel="stylesheet">
-
-    <script src="{{ .PlayURL }}/static/playground-full.js"></script>
-    <script src="{{ .PlayURL }}/static/snippets.js"></script>
-
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="//upper.io/db.v3/apple-touch-icon-precomposed.png">
-    <link rel="shortcut icon" href="//upper.io/db.v3/favicon.ico">
+    <link rel="icon" href="/favicon.svg" data-rh="true">
 
     <title>The upper/db tour</title>
 
@@ -105,7 +108,6 @@
 
       gtag('config', 'UA-176722952-1');
     </script>
-
 
   </body>
 </html>

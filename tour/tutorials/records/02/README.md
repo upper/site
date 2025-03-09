@@ -4,7 +4,6 @@ The `db.Store` provides a foundation for creating data stores and custom
 methods around regular collections.
 
 The following example:
-
 ```go
 book, err := Books(sess).GetBookByTitle("The Shining")
 if err != nil {
@@ -12,8 +11,7 @@ if err != nil {
 }
 ```
 
-Could be implemented with a struct, a method and a function:
-
+could be implemented with a struct, a method, and a function:
 
 ```go
 package main
@@ -44,8 +42,8 @@ func Books(sess db.Session) *BooksStore {
 var _ = interface{db.Store}(&BooksStore{})
 ```
 
-The `Books` function depicted above can be used to create new instances of
-`BooksStore`, a common use case for this is the `Store()` method of a
+You can use the `Books` function depicted above to create new instances of
+`BooksStore`; a common use case for this is the `Store()` method of a
 `db.Record`:
 
 ```go
@@ -62,5 +60,5 @@ func (book *Book) Store(sess db.Session) db.Store {
 Keep in mind that using `db.Record` and/or `db.Store` interfaces is completely
 optional, the ultimate decision should be based on the needs of your project.
 
-> The `db.Store` interface is only available for databases that support
-> transactions, such as CockroachDB, PostgreSQL, MySQL, MSSQL, SQLite and ql.
+The `db.Store` interface is only available for databases that support
+transactions, such as CockroachDB, PostgreSQL, MySQL, MSSQL, SQLite and ql.

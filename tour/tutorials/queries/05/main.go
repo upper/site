@@ -5,30 +5,38 @@ import (
 	"log"
 
 	"github.com/upper/db/v4"
-	"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
-var settings = cockroachdb.ConnectionURL{
-	Database: `booktown`,
-	Host:     `cockroachdb.demo.upper.io`,
-	User:     `demouser`,
-	Password: `demopass`,
+var settings = postgresql.ConnectionURL{
+	Database: "booktown",
+	Host:     "postgres",
+	User:     "demo",
+	Password: "demopass",
+	Options: map[string]string{
+		"sslmode": "disable", // Disable TLS
+	},
 }
 
 // Book represents a record from the "books" table. This table has an integer
 // primary key ("id"):
 //
 // booktown=> \d books
-//        Table "public.books"
-//    Column   |  Type   | Modifiers
+//
+//	    Table "public.books"
+//	Column   |  Type   | Modifiers
+//
 // ------------+---------+-----------
-//  id         | integer | not null
-//  title      | varchar | not null
-//  author_id  | integer |
-//  subject_id | integer |
+//
+//	id         | integer | not null
+//	title      | varchar | not null
+//	author_id  | integer |
+//	subject_id | integer |
+//
 // Indexes:
-//     "books_id_pkey" PRIMARY KEY, btree (id)
-//     "books_title_idx" btree (title)
+//
+//	"books_id_pkey" PRIMARY KEY, btree (id)
+//	"books_title_idx" btree (title)
 type Book struct {
 	ID        uint   `db:"id"`
 	Title     string `db:"title"`
@@ -40,10 +48,10 @@ func main() {
 	// Set logging level to DEBUG
 	db.LC().SetLevel(db.LogLevelDebug)
 
-	sess, err := cockroachdb.Open(settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		fmt.Println("ERROR: Could not establish a connection with database: %v.", err)
-		log.Fatalf(`SUGGESTION: Set password to "demop4ss" and try again.`)
+		log.Fatalf(`SUGGESTION: Set password to "b4dp4ss" and try again.`)
 	}
 	defer sess.Close()
 

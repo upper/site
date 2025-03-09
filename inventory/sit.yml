@@ -1,0 +1,18 @@
+sit:
+  vars:
+    env: "dev"
+    ansible_host: "sit.oslab.internal"
+    container_bind_ip: "127.0.0.1"
+    tour_url: "https://upper-tour.sit.xiam.dev"
+    playground_url: "https://upper-demo.sit.xiam.dev"
+    site_url: "https://upper-site.sit.xiam.dev"
+  hosts:
+    pgserver:
+    playground_executor:
+    playground_webapp:
+    tour:
+    site:
+    vanity:
+    nginx:
+      container_bind_ip: "10.0.2.102"
+      container_bind_port: "2880"

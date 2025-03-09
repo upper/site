@@ -4,28 +4,36 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/upper/db/v4/adapter/cockroachdb"
+	"github.com/upper/db/v4/adapter/postgresql"
 )
 
-var settings = cockroachdb.ConnectionURL{
-	Database: `booktown`,
-	Host:     `cockroachdb.demo.upper.io`,
-	User:     `demouser`,
-	Password: `demop4ss`,
+var settings = postgresql.ConnectionURL{
+	Database: "booktown",
+	Host:     "postgres",
+	User:     "demo",
+	Password: "b4dp4ss",
+	Options: map[string]string{
+		"sslmode": "disable", // Disable TLS
+	},
 }
 
 // Book represents a record from the "books" table.
 // booktown=> \d books
-//       Table "public.books"
-//    Column   |  Type   | Modifiers
+//
+//	   Table "public.books"
+//	Column   |  Type   | Modifiers
+//
 // ------------+---------+-----------
-//  id         | integer | not null
-//  title      | varchar | not null
-//  author_id  | integer |
-//  subject_id | integer |
+//
+//	id         | integer | not null
+//	title      | varchar | not null
+//	author_id  | integer |
+//	subject_id | integer |
+//
 // Indexes:
-//     "books_id_pkey" PRIMARY KEY, btree (id)
-//     "books_title_idx" btree (title)
+//
+//	"books_id_pkey" PRIMARY KEY, btree (id)
+//	"books_title_idx" btree (title)
 type Book struct {
 	ID        uint   `db:"id,omitempty"`
 	Title     string `db:"title"`
@@ -35,14 +43,19 @@ type Book struct {
 
 // Author represents a record from the "authors" table.
 // booktown=> \d authors
-//       Table "public.authors"
-//    Column   |  Type   | Modifiers
+//
+//	   Table "public.authors"
+//	Column   |  Type   | Modifiers
+//
 // ------------+---------+-----------
-//  id         | integer | not null
-//  last_name  | text    |
-//  first_name | text    |
+//
+//	id         | integer | not null
+//	last_name  | text    |
+//	first_name | text    |
+//
 // Indexes:
-//     "authors_pkey" PRIMARY KEY, btree (id)
+//
+//	"authors_pkey" PRIMARY KEY, btree (id)
 type Author struct {
 	ID        uint   `db:"id,omitempty"`
 	LastName  string `db:"last_name"`
@@ -51,14 +64,19 @@ type Author struct {
 
 // Subject represents a record from the "subjects" table.
 // booktown=> \d subjects
-//     Table "public.subjects"
-//   Column  |  Type   | Modifiers
+//
+//	  Table "public.subjects"
+//	Column  |  Type   | Modifiers
+//
 // ----------+---------+-----------
-//  id       | integer | not null
-//  subject  | text    |
-//  location | text    |
+//
+//	id       | integer | not null
+//	subject  | text    |
+//	location | text    |
+//
 // Indexes:
-//     "subjects_pkey" PRIMARY KEY, btree (id)
+//
+//	"subjects_pkey" PRIMARY KEY, btree (id)
 type Subject struct {
 	ID       uint   `db:"id,omitempty"`
 	Subject  string `db:"subject"`
@@ -66,7 +84,7 @@ type Subject struct {
 }
 
 func main() {
-	sess, err := cockroachdb.Open(settings)
+	sess, err := postgresql.Open(settings)
 	if err != nil {
 		log.Fatal("Open: ", err)
 	}

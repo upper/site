@@ -1,0 +1,16 @@
+prod:
+  vars:
+    env: "prod"
+    ansible_host: "prod.internal.upper.io"
+    container_bind_ip: "0.0.0.0"
+    tour_url: "https://tour.upper.io"
+    playground_url: "https://demo.upper.io"
+    site_url: "https://upper.io"
+  hosts:
+    pgserver:
+    playground_executor:
+    playground_webapp:
+    tour:
+    site:
+    vanity:
+    nginx:

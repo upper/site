@@ -15,11 +15,11 @@ for res.Next(&book) {
 }
 ```
 
-`Next` will return `true` until there are no more records left to be read in the
-result set.
+`Next` will return `true` until there are no more records left to be read in
+the result set.
 
-When handling results one by one, you'll also need to check for errors (with
-`Err`) and free locked resources manually (with `Close`).
+When handling results individually, you'll also need to manually check for
+errors (with `Err`) and free locked resources (with `Close`).
 
 ```go
 res := booksTable.Find(...)
@@ -34,4 +34,5 @@ if err := res.Err(); err != nil {
 }
 ```
 
-> Calling `Close` is not required when using `One` or `All`.
+Calling `Close` is not required when using `One` or `All`, as they're closed
+automatically.

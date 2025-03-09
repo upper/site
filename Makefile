@@ -1,26 +1,51 @@
-POSTGRES_PASSWORD ?=
+GIT_SHORTHASH       := $(shell git rev-parse --short HEAD)
+DOCKER_IMAGE_TAG    := $(GIT_SHORTHASH)
 
-export POSTGRES_PASSWORD
+VIRTUAL_ENV         ?= ./.venv
 
-push:
-	for MODULE in unsafebox vanity tour site site.legacy; do \
-		$(MAKE) -C $$MODULE docker-push || exit 1; \
-	done
+export VIRTUAL_ENV
 
-deploy: push
-	$(MAKE) -C postgresql-server deploy && \
-	$(MAKE) -C cockroachdb-server deploy && \
-	$(MAKE) -C vanity deploy && \
-	$(MAKE) -C unsafebox deploy && \
-	$(MAKE) -C tour deploy && \
-	$(MAKE) -C site deploy && \
-	$(MAKE) -C site.legacy deploy
+export DOCKER_IMAGE_TAG
 
-deploy-prod: push
-	$(MAKE) -C postgresql-server deploy-prod && \
-	$(MAKE) -C cockroachdb-server deploy-prod && \
-	$(MAKE) -C vanity deploy-prod && \
-	$(MAKE) -C unsafebox deploy-prod && \
-	$(MAKE) -C tour deploy-prod && \
-	$(MAKE) -C site deploy-prod && \
-	$(MAKE) -C site.legacy deploy-prod
+docker-build: \
+	docker-build-site \
+	docker-build-vanity \
+	docker-build-playground-executor \
+	docker-build-tour
+
+docker-push: \
+	docker-push-site \
+	docker-push-vanity \
+	docker-push-playground-executor \
+	docker-push-tour
+
+docker-build-%:
+	docker build -t "upper/${*}:${DOCKER_IMAGE_TAG}" -f "${*}/Dockerfile" "${*}/"
+
+docker-push-%: docker-build-%
+	docker tag "upper/${*}:${DOCKER_IMAGE_TAG}" "upper/${*}:latest"
+	docker push "upper/${*}:${DOCKER_IMAGE_TAG}" && \
+	docker push "upper/${*}:latest"
+
+deploy-%:
+	ansible-playbook \
+		-i "./inventory/${*}.yml" \
+		-v playbook.yml
+
+deploy: \
+	deploy-local
+
+yamlfmt:
+	find . -name \*.yml | grep -v node_modules | xargs yamlfmt
+
+run:
+	(cd site && \
+	yarn start --host 0.0.0.0)
+
+run-tour:
+	cd tour && \
+	go run cmd/tour/main.go
+
+build:
+	(cd site && \
+	yarn build)

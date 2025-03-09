@@ -1,0 +1,50 @@
+- set_fact:
+    image_name: "upper/playground-executor"
+    image_tag: "{{ docker_image_tag }}"
+    container_name: "{{ container_prefix }}playground-executor"
+    app_bind_port: 3003
+    container_bind_port: 3003
+- set_fact:
+    image_full_name: "{{ public_docker_registry }}/{{ image_name }}:{{ image_tag }}"
+- name: "pull docker image: {{ image_full_name }}"
+  docker_image:
+    name: "{{ image_full_name }}"
+    source: "pull"
+    state: "present"
+    force_source: "yes"
+- name: "stop container: {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    state: "absent"
+  ignore_errors: "yes"
+- name: "(re)start container: {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_full_name }}"
+    state: "started"
+    restart_policy: "always"
+    memory: "2048M"
+    memory_swap: "0"
+    memory_swappiness: "0"
+    privileged: "yes"
+    ulimits:
+      - nofile:512:1024
+      - nproc:128
+    networks:
+      - name: "{{ network_name }}"
+    ports:
+      - "{{ container_bind_ip }}:{{ container_bind_port }}:{{ app_bind_port }}"
+    env:
+      ENV: "{{ env }}"
+- name: "health check (compile)"
+  uri:
+    url: "http://{{ container_bind_ip }}:{{ container_bind_port }}/compile"
+    method: POST
+    body: 'version=2&body=package+main%0A%0Aimport+%22fmt%22%0A%0Afunc+main()+%7B%0A%09fmt.Println(%22Hello%2C+playground%22)%0A%7D%0A'
+    status_code:
+      - 200
+    return_content: yes
+  register: response
+  until: response.status == 200
+  retries: "{{ healthcheck_retries }}"
+  delay: "{{ healthcheck_interval }}"

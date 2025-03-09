@@ -11,6 +11,11 @@ main.tour .feature {
 main a, main a:link, main a:active, main a:visited {
   color: #1f8ace;
 }
+main .buttons a {
+  padding: 0.5em 0.7em;
+  line-height: 2em;
+  cursor: pointer;
+}
 main .buttons a,
 main .buttons a:link,
 main .buttons a:visited,

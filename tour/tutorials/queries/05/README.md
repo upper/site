@@ -18,8 +18,8 @@ different logging level:
 db.LC().SetLevel(db.LogLevelDebug)
 ```
 
-Make sure to set an appropriate logging level in production, as using levels
-lower than `db.LogLevelWarn` could make things pretty slow and verbose.
+Set an appropriate logging level in production, as using levels lower than
+`db.LogLevelWarn` could make things pretty slow and verbose.
 
 ```go
 db.LC().SetLevel(db.LogLevelError)
@@ -34,13 +34,9 @@ application, so make sure you're handling them properly:
 err = booksTable.Find(1).One(&book)
 if err != nil {
   if errors.Is(err, db.ErrNoMoreRows) {
-    // First possible error scenario
-  } else {
-    // All other possible error scenarios
-    return err
+    // No rows found, which is okay.
+    return nil
   }
+  return err
 }
 ```
-
-`upper/db` defines different variables that return error messages.  To
-learn more, click [here](https://github.com/upper/db)

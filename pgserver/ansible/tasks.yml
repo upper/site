@@ -1,0 +1,115 @@
+- name: "set container facts"
+  set_fact:
+    image_name: "postgres"
+    image_tag: "17"
+    container_name: "{{ container_prefix }}postgres"
+    container_base_dir: "{{ services_base_dir }}/postgres"
+    postgres_user: "postgres"
+    postgres_password: "{{ lookup('password', '/dev/null length=20 chars=ascii_letters,digits') }}"
+- name: "set docker facts"
+  set_fact:
+    image_full_name: "{{ public_docker_registry}}/{{ image_name }}:{{ image_tag }}"
+    booktown_sql: "{{ container_base_dir }}/booktown.sql"
+- name: "create data directory"
+  file:
+    path: "{{ container_base_dir }}"
+    state: "directory"
+- name: "upload booktown.sql"
+  copy:
+    src: "../booktown.sql"
+    dest: "{{ container_base_dir }}/booktown.sql"
+- name: "pull docker image: {{ image_full_name }}"
+  docker_image:
+    name: "{{ image_full_name }}"
+    source: "pull"
+    state: "present"
+- name: "stop container: {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    state: "absent"
+- name: "(re)start container: {{ container_name }}"
+  docker_container:
+    name: "{{ container_name }}"
+    image: "{{ image_full_name }}"
+    state: "started"
+    memory: 256m
+    hostname: "postgres"
+    memory_swap: 0
+    memory_swappiness: 0
+    ulimits:
+      - nofile:256:512
+      - nproc:128
+    volumes:
+      - "{{ booktown_sql }}:/booktown.sql"
+    restart_policy: "always"
+    ports:
+      - "{{ container_bind_ip }}:5432:5432"
+    env:
+      POSTGRES_USER: "{{ postgres_user }}"
+      POSTGRES_PASSWORD: "{{ postgres_password }}"
+- name: "wait until postgres is ready"
+  postgresql_ping:
+    login_host: "{{ container_bind_ip }}"
+    login_password: "{{ postgres_password }}"
+    login_user: "{{ postgres_user }}"
+  register: pgserver_ping
+  until: pgserver_ping.is_available == true and pgserver_ping.failed == false
+  retries: "{{ healthcheck_retries }}"
+  delay: "{{ healthcheck_interval }}"
+- name: "remove demo database"
+  postgresql_db:
+    login_host: "{{ container_bind_ip }}"
+    login_password: "{{ postgres_password }}"
+    login_user: "{{ postgres_user }}"
+    name: "booktown"
+    state: "absent"
+- name: "remove demo user"
+  postgresql_user:
+    login_host: "{{ container_bind_ip }}"
+    login_password: "{{ postgres_password }}"
+    login_user: "{{ postgres_user }}"
+    name: "{{ pgserver_demo_user }}"
+    state: "absent"
+- name: "add demo user"
+  postgresql_user:
+    login_host: "{{ container_bind_ip }}"
+    login_password: "{{ postgres_password }}"
+    login_user: "{{ postgres_user }}"
+    role_attr_flags: "LOGIN"
+    name: "{{ pgserver_demo_user }}"
+    password: "{{ pgserver_demo_password }}"
+- name: "add demo database"
+  postgresql_db:
+    login_host: "{{ container_bind_ip }}"
+    login_password: "{{ postgres_password }}"
+    login_user: "{{ postgres_user }}"
+    name: booktown
+    owner: "{{ pgserver_demo_user }}"
+- name: "load demo data"
+  shell: "docker exec -t {{ container_name }} bash -c 'psql -U{{ pgserver_demo_user }} booktown < /booktown.sql'"
+- name: "remove privileges from demo user"
+  postgresql_privs:
+    login_host: "{{ container_bind_ip }}"
+    login_password: "{{ postgres_password }}"
+    login_user: "{{ postgres_user }}"
+    db: booktown
+    state: absent
+    roles: "{{ pgserver_demo_user }}"
+    priv: ALL
+    objs: ALL_IN_SCHEMA
+- name: "grant read-only privileges to demo user"
+  postgresql_privs:
+    login_host: "{{ container_bind_ip }}"
+    login_password: "{{ postgres_password }}"
+    login_user: "{{ postgres_user }}"
+    db: booktown
+    roles: "{{ pgserver_demo_user }}"
+    priv: SELECT
+    objs: ALL_IN_SCHEMA
+- name: "add container to network"
+  docker_network:
+    name: "{{ network_name }}"
+    state: "present"
+    appends: "yes"
+    connected:
+      - "{{ container_name }}"
