@@ -68,7 +68,7 @@ it `BookStore`:
 
 ```go
 type BooksStore struct {
-  Collection db.Collection
+  db.Collection
 }
 
 var _ = db.Store(&BooksStore{})
@@ -111,7 +111,7 @@ mixed together. See the following example:
 
 ```go
 type BooksStore struct {
-  Collection db.Collection
+  db.Collection
 }
 
 func (books *BooksStore) FindByTitle(title string) (*Book, error) {
